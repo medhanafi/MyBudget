@@ -25,3 +25,4 @@
 /.nb-gradle/
 
 ### KM Soft ###
+/.attach_pid*

@@ -11,7 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity(name = "category")
-public class Category {
+public class Category extends AbstractEntity<Long> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6740473779197078157L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -28,5 +33,46 @@ public class Category {
 
 	@OneToMany(mappedBy = "category")
 	private Set<SubCategory> subCategory = new HashSet<>();
+
+	public String getCategoryLabel() {
+		return this.categoryLabel;
+	}
+
+	public void setCategoryLabel(String categoryLabel) {
+		this.categoryLabel = categoryLabel;
+	}
+
+	public String getCategoryState() {
+		return this.categoryState;
+	}
+
+	public void setCategoryState(String categoryState) {
+		this.categoryState = categoryState;
+	}
+
+	public Float getTotalCost() {
+		return this.totalCost;
+	}
+
+	public void setTotalCost(Float totalCost) {
+		this.totalCost = totalCost;
+	}
+
+	public Set<SubCategory> getSubCategory() {
+		return this.subCategory;
+	}
+
+	public void setSubCategory(Set<SubCategory> subCategory) {
+		this.subCategory = subCategory;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Override
+	public Long primaryKey() {
+		return this.id;
+	}
 
 }
