@@ -24,13 +24,13 @@ public class SubCategory {
 	@Column(length = 25)
 	private String subCategoryState;
 
-	@Column(length = 11)
+	@Column(nullable = false, length = 11)
 	private Float totalCost;
 
 	@ManyToOne
 	private Category category;
 
-	@OneToMany(mappedBy = "items")
+	@OneToMany(mappedBy = "subCategory")
 	private Set<Item> items = new HashSet<>();
 
 }

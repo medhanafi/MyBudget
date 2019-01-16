@@ -33,6 +33,6 @@ public class Item {
 	@ManyToOne
 	private SubCategory subCategory;
 
-	@OneToMany(mappedBy = "shoppinglist")
+	@OneToMany(mappedBy = "item")
 	private Set<ShoppingList> shoppinglist = new HashSet<>();
 }

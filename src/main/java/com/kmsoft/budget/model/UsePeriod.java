@@ -32,6 +32,6 @@ public class UsePeriod {
 	@Column(nullable = false, length = 10)
 	private String date;
 
-	@OneToMany(mappedBy = "items")
+	@OneToMany(mappedBy = "periode")
 	private Set<Item> items = new HashSet<>();
 }

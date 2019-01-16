@@ -26,7 +26,7 @@ public class Category {
 	@Column(length = 11)
 	private Float totalCost;
 
-	@OneToMany(mappedBy = "subCategory")
-	private Set<SubCategory> subCategories = new HashSet<>();
+	@OneToMany(mappedBy = "category")
+	private Set<SubCategory> subCategory = new HashSet<>();
 
 }
