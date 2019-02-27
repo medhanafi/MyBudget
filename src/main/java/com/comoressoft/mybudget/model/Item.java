@@ -50,4 +50,60 @@ public class Item {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item", orphanRemoval = true)
 	private Set<ItemShoppingList> itemShoppingList = new HashSet<>();
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getItemLabelle() {
+		return itemLabelle;
+	}
+
+	public void setItemLabelle(String itemLabelle) {
+		this.itemLabelle = itemLabelle;
+	}
+
+	public Float getExpectedAmount() {
+		return expectedAmount;
+	}
+
+	public void setExpectedAmount(Float expectedAmount) {
+		this.expectedAmount = expectedAmount;
+	}
+
+	public int getExpectedQuantity() {
+		return expectedQuantity;
+	}
+
+	public void setExpectedQuantity(int expectedQuantity) {
+		this.expectedQuantity = expectedQuantity;
+	}
+
+	public LocalDate getDateItem() {
+		return dateItem;
+	}
+
+	public void setDateItem(LocalDate dateItem) {
+		this.dateItem = dateItem;
+	}
+
+	public SubCategory getSubCategory() {
+		return subCategory;
+	}
+
+	public void setSubCategory(SubCategory subCategory) {
+		this.subCategory = subCategory;
+	}
+
+	public Set<ItemShoppingList> getItemShoppingList() {
+		return itemShoppingList;
+	}
+
+	public void setItemShoppingList(Set<ItemShoppingList> itemShoppingList) {
+		this.itemShoppingList = itemShoppingList;
+	}
+
 }

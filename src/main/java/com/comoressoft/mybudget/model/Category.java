@@ -34,4 +34,45 @@ public class Category {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
 	private Set<SubCategory> subCategory = new HashSet<>();
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getCategoryLabel() {
+		return categoryLabel;
+	}
+
+	public void setCategoryLabel(String categoryLabel) {
+		this.categoryLabel = categoryLabel;
+	}
+
+	public String getCategoryState() {
+		return categoryState;
+	}
+
+	public void setCategoryState(String categoryState) {
+		this.categoryState = categoryState;
+	}
+
+	public Float getCategoryTotalCost() {
+		return categoryTotalCost;
+	}
+
+	public void setCategoryTotalCost(Float categoryTotalCost) {
+		this.categoryTotalCost = categoryTotalCost;
+	}
+
+	public Set<SubCategory> getSubCategory() {
+		return subCategory;
+	}
+
+	public void setSubCategory(Set<SubCategory> subCategory) {
+		this.subCategory = subCategory;
+	}
+
+	
 }

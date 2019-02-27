@@ -34,4 +34,52 @@ public class ItemShoppingList {
 	@ManyToOne
 	private ShoppingList shoppingList;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Float getActualAmount() {
+		return actualAmount;
+	}
+
+	public void setActualAmount(Float actualAmount) {
+		this.actualAmount = actualAmount;
+	}
+
+	public int getActualQuantity() {
+		return actualQuantity;
+	}
+
+	public void setActualQuantity(int actualQuantity) {
+		this.actualQuantity = actualQuantity;
+	}
+
+	public LocalDate getPurchasedDate() {
+		return purchasedDate;
+	}
+
+	public void setPurchasedDate(LocalDate purchasedDate) {
+		this.purchasedDate = purchasedDate;
+	}
+
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
+	public ShoppingList getShoppingList() {
+		return shoppingList;
+	}
+
+	public void setShoppingList(ShoppingList shoppingList) {
+		this.shoppingList = shoppingList;
+	}
+
 }

@@ -2,17 +2,17 @@ package com.comoressoft.mybudget.dto;
 
 public class SubCategoryDTO {
 
-	private int subCatId;
+	private Long subCatId;
 	private String subCatLabel;
 	private String subCatState;
 	private Float subCatTotalCost;
 	private CategoryDTO category;
 
-	public int getSubCatId() {
+	public Long getSubCatId() {
 		return subCatId;
 	}
 
-	public void setSubCatId(int subCatId) {
+	public void setSubCatId(Long subCatId) {
 		this.subCatId = subCatId;
 	}
 

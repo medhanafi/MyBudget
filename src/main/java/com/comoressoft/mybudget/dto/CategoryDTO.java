@@ -3,17 +3,17 @@ package com.comoressoft.mybudget.dto;
 import java.util.Set;
 
 public class CategoryDTO {
-	private int catId;
+	private Long catId;
 	private String catLabel;
 	private String catState;
 	private Float catTotalCost;
 	private Set<SubCategoryDTO> subCategories;
 
-	public int getCatId() {
+	public Long getCatId() {
 		return catId;
 	}
 
-	public void setCatId(int catId) {
+	public void setCatId(Long catId) {
 		this.catId = catId;
 	}
 

@@ -35,4 +35,38 @@ public class ShoppingList {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingList", orphanRemoval = true)
 	private Set<ItemShoppingList> itemShoppingList = new HashSet<>();
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public LocalDate getDateShopping() {
+		return dateShopping;
+	}
+
+	public void setDateShopping(LocalDate dateShopping) {
+		this.dateShopping = dateShopping;
+	}
+
+	public Float getAllocatedAmount() {
+		return allocatedAmount;
+	}
+
+	public void setAllocatedAmount(Float allocatedAmount) {
+		this.allocatedAmount = allocatedAmount;
+	}
+
+	public Set<ItemShoppingList> getItemShoppingList() {
+		return itemShoppingList;
+	}
+
+	public void setItemShoppingList(Set<ItemShoppingList> itemShoppingList) {
+		this.itemShoppingList = itemShoppingList;
+	}
+	
+	
 }
