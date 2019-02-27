@@ -300,3 +300,6 @@ temp/
 /.metadata/
 /apps/podium-api/yarn.lock
 /apps/mobile-accounts/yarn.lock
+*.classpath
+/*.project
+/.settings

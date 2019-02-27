@@ -11,12 +11,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-@Entity(name = "category")
+@Entity
+@Table(name = "category")
 public class Category {
 
 	@Id
 	@GeneratedValue(generator = "seq_category", strategy = GenerationType.SEQUENCE)
+	@Column(name = "id", nullable = false)
 	private Long id;
 
 	@Column(nullable = false, length = 64)
