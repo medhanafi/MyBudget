@@ -6,7 +6,6 @@ public class SubCategoryDTO {
 	private String subCatLabel;
 	private String subCatState;
 	private Float subCatTotalCost;
-	private CategoryDTO category;
 
 	public Long getSubCatId() {
 		return subCatId;
@@ -38,14 +37,6 @@ public class SubCategoryDTO {
 
 	public void setSubCatTotalCost(Float subCatTotalCost) {
 		this.subCatTotalCost = subCatTotalCost;
-	}
-
-	public CategoryDTO getCategory() {
-		return category;
-	}
-
-	public void setCategory(CategoryDTO category) {
-		this.category = category;
 	}
 
 }

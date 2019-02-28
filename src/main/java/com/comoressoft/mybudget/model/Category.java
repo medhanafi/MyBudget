@@ -31,7 +31,7 @@ public class Category {
 	@Column(length = 11)
 	private Float categoryTotalCost;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
 	private Set<SubCategory> subCategory = new HashSet<>();
 
 	public Long getId() {
@@ -74,5 +74,4 @@ public class Category {
 		this.subCategory = subCategory;
 	}
 
-	
 }
