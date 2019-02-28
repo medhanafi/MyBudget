@@ -34,7 +34,7 @@ public class SubCategory {
 	@ManyToOne
 	private Category category;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "subCategory", orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "subCategory", orphanRemoval = true)
 	private Set<Item> item = new HashSet<>();
 
 	public Long getId() {

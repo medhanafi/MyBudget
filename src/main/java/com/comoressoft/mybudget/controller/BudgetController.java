@@ -30,7 +30,7 @@ public class BudgetController {
 		return this.getResponseWithStatus(result);
 	}
 
-	@GetMapping(value = "/summary{month}")
+	@GetMapping(value = "/summary/{month}")
 	ResponseEntity<?> getSummary(@PathVariable(value = "month", required = true) int month) throws ServiceException {
 
 		Set<SummaryDTO> result = this.ewsService.getSummary(month);

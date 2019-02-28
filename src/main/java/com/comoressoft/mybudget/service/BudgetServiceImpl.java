@@ -1,5 +1,6 @@
 package com.comoressoft.mybudget.service;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +41,66 @@ public class BudgetServiceImpl {
 			cdto.setCatId(cat.getId());
 			cdto.setCatLabel(cat.getCategoryLabel());
 			cdto.setCatState(cat.getCategoryState());
+
+			Set<SubCategoryDTO> subCategories = new HashSet<>();
+
+			for (SubCategory scat : cat.getSubCategory()) {
+				scdto = new SubCategoryDTO();
+				scdto.setSubCatId(scat.getId());
+				scdto.setSubCatLabel(scat.getSubCategoryLabel());
+				scdto.setSubCatState(scat.getSubCategoryState());
+				scdto.setSubCatTotalCost(calculatSubCatTotalCost(scat));
+
+				subCategories.add(scdto);
+			}
+			cdto.setCatTotalCost(calculatCatTotalCost(cat));
+			cdto.setSubCategories(subCategories);
+			categories.add(cdto);
+		}
+
+	}
+
+	private Float calculatCatTotalCost(Category cat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Float calculatSubCatTotalCost(SubCategory scat) {
+		Float sum = 0F;
+		for (Item item : scat.getItem()) {
+			sum = sum + (item.getExpectedQuantity() * item.getExpectedAmount());
+		}
+		return sum;
+	}
+
+	public Set<SummaryDTO> getSummary(int month) {
+		SummaryDTO summary = new SummaryDTO();
+		Set<Item> items = getItemsByMonth(month);
+
+		return null;
+	}
+
+	private Set<Item> getItemsByMonth(int month) {
+		Calendar cal = Calendar.getInstance();
+		LocalDate localDate = LocalDate.of(cal.YEAR, month, cal.DATE);
+		return itemRepository.findByDateItem(localDate);
+	}
+
+	public Set<CategoryDTO> getCategoriesByMonth(int month) {
+		Set<CategoryDTO> categories = new HashSet<>();
+		Set<Item> items = getItemsByMonth(month);
+		for (Item item : items) {
+
+		}
+		List<Category> listCat = categoryRepository.findAll();
+
+		CategoryDTO cdto = null;
+		SubCategoryDTO scdto = null;
+		for (Category cat : listCat) {
+			cdto = new CategoryDTO();
+			cdto.setCatId(cat.getId());
+			cdto.setCatLabel(cat.getCategoryLabel());
+			cdto.setCatState(cat.getCategoryState());
 			cdto.setCatTotalCost(cat.getCategoryTotalCost());
 			Set<SubCategoryDTO> subCategories = new HashSet<>();
 
@@ -56,15 +117,6 @@ public class BudgetServiceImpl {
 			categories.add(cdto);
 		}
 
+		return categories;
 	}
-
-	public Set<SummaryDTO> getSummary(int month) {
-		SummaryDTO summary = new SummaryDTO();
-		Calendar cal = Calendar.getInstance();
-		cal.set(cal.YEAR, month, cal.DATE);
-		Set<Item> items = itemRepository.findByDateItem(cal.getTime());
-
-		return null;
-	}
-
 }
