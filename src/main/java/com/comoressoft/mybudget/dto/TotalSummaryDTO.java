@@ -1,6 +1,7 @@
 package com.comoressoft.mybudget.dto;
 
 public class TotalSummaryDTO {
+
 	private Float income;
 	private Float expense;
 	private Float balance;

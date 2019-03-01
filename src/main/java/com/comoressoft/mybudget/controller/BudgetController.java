@@ -1,18 +1,22 @@
 package com.comoressoft.mybudget.controller;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.comoressoft.mybudget.dto.CategoryDTO;
-import com.comoressoft.mybudget.dto.SummaryDTO;
+import com.comoressoft.mybudget.model.Item;
 import com.comoressoft.mybudget.service.BudgetServiceImpl;
 
 @RestController
@@ -30,18 +34,39 @@ public class BudgetController {
 		return this.getResponseWithStatus(result);
 	}
 
-	@GetMapping(value = "/summary/{month}")
-	ResponseEntity<?> getSummary(@PathVariable(value = "month", required = true) int month) throws ServiceException {
+	@PostMapping(value = "/additem")
+	ResponseEntity<?> addItem(@RequestParam(value = "item_labelle", required = true) String itemLabelle,
+			@RequestParam(value = "expected_amount", required = true) String expectedAmount,
+			@RequestParam(value = "expected_quantity", required = true) String expectedQuantity,
+			@RequestParam(value = "date_item", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate dateItem)
+			throws ServiceException {
 
-		Set<SummaryDTO> result = this.ewsService.getSummary(month);
+		Item item = new Item();
+		item.setItemLabelle(itemLabelle);
+		item.setExpectedAmount(Float.parseFloat(expectedAmount));
+		item.setExpectedQuantity(Integer.parseInt(expectedQuantity));
+		item.setDateItem(dateItem);
+
+		Item result = this.ewsService.addItem(item);
 		return this.getResponseWithStatus(result);
 	}
 
-	private ResponseEntity<?> getResponseWithStatus(Set<?> result) {
-		if (result.isEmpty()) {
-			return new ResponseEntity<Set<?>>(result, HttpStatus.NO_CONTENT);
+	@GetMapping(value = { "/summary/{month}", "/summary/", "/summary", "/summary{month}" })
+	ResponseEntity<?> getSummary(@PathVariable(value = "month", required = false) Integer month)
+			throws ServiceException {
+
+		if (month != null) {
+			return this.getResponseWithStatus(this.ewsService.getSummary(month));
 		} else {
-			return new ResponseEntity<Set<?>>(result, HttpStatus.OK);
+			return this.getResponseWithStatus(this.ewsService.getSummary());
+		}
+	}
+
+	private <T> ResponseEntity<?> getResponseWithStatus(T result) {
+		if (result == null) {
+			return new ResponseEntity<T>(result, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<T>(result, HttpStatus.OK);
 		}
 	}
 
