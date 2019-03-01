@@ -1,5 +1,6 @@
 package com.comoressoft.mybudget.model;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "category")
@@ -28,8 +31,9 @@ public class Category {
 	@Column(length = 25)
 	private String categoryState;
 
-	@Column(length = 11)
-	private Float categoryTotalCost;
+	@Column(length = 11, precision = 10, scale = 2)
+	@Type(type = "big_decimal")
+	private BigDecimal categoryTotalCost;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
 	private Set<SubCategory> subCategory = new HashSet<>();
@@ -59,11 +63,11 @@ public class Category {
 	}
 
 	public Float getCategoryTotalCost() {
-		return categoryTotalCost;
+		return Float.parseFloat(String.valueOf(categoryTotalCost));
 	}
 
 	public void setCategoryTotalCost(Float categoryTotalCost) {
-		this.categoryTotalCost = categoryTotalCost;
+		this.categoryTotalCost = BigDecimal.valueOf(categoryTotalCost);
 	}
 
 	public Set<SubCategory> getSubCategory() {

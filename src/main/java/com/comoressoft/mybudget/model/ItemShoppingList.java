@@ -1,5 +1,6 @@
 package com.comoressoft.mybudget.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "item_shopping_list")
 public class ItemShoppingList {
@@ -19,8 +22,9 @@ public class ItemShoppingList {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(nullable = true)
-	private Float actualAmount;
+	@Column(nullable = true, precision = 10, scale = 2)
+	@Type(type = "big_decimal")
+	private BigDecimal actualAmount;
 
 	@Column(nullable = false)
 	private int actualQuantity;
@@ -43,11 +47,11 @@ public class ItemShoppingList {
 	}
 
 	public Float getActualAmount() {
-		return actualAmount;
+		return Float.parseFloat(String.valueOf(actualAmount));
 	}
 
 	public void setActualAmount(Float actualAmount) {
-		this.actualAmount = actualAmount;
+		this.actualAmount = BigDecimal.valueOf(actualAmount);
 	}
 
 	public int getActualQuantity() {

@@ -1,5 +1,6 @@
 package com.comoressoft.mybudget.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "shopping_list")
 public class ShoppingList {
@@ -26,8 +29,9 @@ public class ShoppingList {
 	@Column(nullable = false)
 	private LocalDate dateShopping;
 
-	@Column(nullable = false)
-	private Float allocatedAmount;
+	@Column(nullable = false, precision = 10, scale = 2)
+	@Type(type = "big_decimal")
+	private BigDecimal allocatedAmount;
 
 	// @ManyToMany(fetch = FetchType.LAZY, mappedBy = "shoppingList")
 	// @JsonIgnore
@@ -53,11 +57,11 @@ public class ShoppingList {
 	}
 
 	public Float getAllocatedAmount() {
-		return allocatedAmount;
+		return Float.parseFloat(String.valueOf(allocatedAmount));
 	}
 
 	public void setAllocatedAmount(Float allocatedAmount) {
-		this.allocatedAmount = allocatedAmount;
+		this.allocatedAmount = BigDecimal.valueOf(allocatedAmount);
 	}
 
 	public Set<ItemShoppingList> getItemShoppingList() {
@@ -67,6 +71,5 @@ public class ShoppingList {
 	public void setItemShoppingList(Set<ItemShoppingList> itemShoppingList) {
 		this.itemShoppingList = itemShoppingList;
 	}
-	
-	
+
 }

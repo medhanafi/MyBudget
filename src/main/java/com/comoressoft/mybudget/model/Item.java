@@ -1,5 +1,6 @@
 package com.comoressoft.mybudget.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "item")
 public class Item {
@@ -27,8 +30,9 @@ public class Item {
 	@Column(nullable = false, length = 128)
 	private String itemLabelle;
 
-	@Column(nullable = true)
-	private Float expectedAmount;
+	@Column(nullable = false, precision = 8, scale = 2)
+	@Type(type = "big_decimal")
+	private BigDecimal expectedAmount;
 
 	@Column(nullable = false)
 	private int expectedQuantity;
@@ -67,11 +71,11 @@ public class Item {
 	}
 
 	public Float getExpectedAmount() {
-		return expectedAmount;
+		return Float.parseFloat(String.valueOf(expectedAmount));
 	}
 
 	public void setExpectedAmount(Float expectedAmount) {
-		this.expectedAmount = expectedAmount;
+		this.expectedAmount = BigDecimal.valueOf(expectedAmount);
 	}
 
 	public int getExpectedQuantity() {

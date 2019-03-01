@@ -32,6 +32,7 @@ public class BudgetServiceImpl {
 	private CategoryRepository categoryRepository;
 	@Autowired
 	private ItemRepository itemRepository;
+	@Autowired
 	private SubCategoryRepository subCategoryRepository;
 
 	public Set<CategoryDTO> getCategories() {
@@ -188,8 +189,8 @@ public class BudgetServiceImpl {
 	}
 
 	private Set<Item> getItemsByMonth(int month) {
-		Calendar cal = Calendar.getInstance();
-		LocalDate localDate = LocalDate.of(cal.YEAR, month, cal.DATE);
+		LocalDate localDate = LocalDate.of(Calendar.getInstance().get(Calendar.YEAR), month,
+				Calendar.getInstance().get(Calendar.DATE));
 		return itemRepository.findByDateItem(localDate);
 	}
 
