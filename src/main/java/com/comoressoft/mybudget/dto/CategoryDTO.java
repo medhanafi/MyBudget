@@ -1,13 +1,15 @@
 package com.comoressoft.mybudget.dto;
 
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.List;
 
 public class CategoryDTO {
 	private Long catId;
 	private String catLabel;
 	private String catState;
-	private Float catTotalCost;
-	private Set<SubCategoryDTO> subCategories;
+	private BigDecimal catTotalCost;
+	
+	private List<SubCategoryDTO> subCategories;
 
 	public Long getCatId() {
 		return catId;
@@ -33,19 +35,20 @@ public class CategoryDTO {
 		this.catState = catState;
 	}
 
-	public Float getCatTotalCost() {
+	public BigDecimal getCatTotalCost() {
 		return catTotalCost;
 	}
 
-	public void setCatTotalCost(Float catTotalCost) {
+	public void setCatTotalCost(BigDecimal catTotalCost) {
 		this.catTotalCost = catTotalCost;
 	}
 
-	public Set<SubCategoryDTO> getSubCategories() {
+
+	public List<SubCategoryDTO> getSubCategories() {
 		return subCategories;
 	}
 
-	public void setSubCategories(Set<SubCategoryDTO> subCategories) {
+	public void setSubCategories(List<SubCategoryDTO> subCategories) {
 		this.subCategories = subCategories;
 	}
 

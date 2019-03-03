@@ -1,6 +1,8 @@
 package com.comoressoft.mybudget.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.service.spi.ServiceException;
@@ -24,13 +26,13 @@ import com.comoressoft.mybudget.service.BudgetServiceImpl;
 public class BudgetController {
 
 	@Autowired
-	private BudgetServiceImpl ewsService;
+	private BudgetServiceImpl budgetService;
 
-	@GetMapping(value = "/categories/{month}")
-	ResponseEntity<?> getCateegories(@PathVariable(value = "month", required = false) String month)
+	@GetMapping(value = "/categories")
+	ResponseEntity<?> getCateegories(@RequestParam(value = "month", required = false) Integer month)
 			throws ServiceException {
 
-		Set<CategoryDTO> result = this.ewsService.getCategories();
+		List<CategoryDTO> result = this.budgetService.getCategories(month);
 		return this.getResponseWithStatus(result);
 	}
 
@@ -43,11 +45,11 @@ public class BudgetController {
 
 		Item item = new Item();
 		item.setItemLabelle(itemLabelle);
-		item.setExpectedAmount(Float.parseFloat(expectedAmount));
+		item.setExpectedAmount(new BigDecimal(expectedAmount));
 		item.setExpectedQuantity(Integer.parseInt(expectedQuantity));
 		item.setDateItem(dateItem);
 
-		Item result = this.ewsService.addItem(item);
+		Item result = this.budgetService.addItem(item);
 		return this.getResponseWithStatus(result);
 	}
 
@@ -56,9 +58,9 @@ public class BudgetController {
 			throws ServiceException {
 
 		if (month != null) {
-			return this.getResponseWithStatus(this.ewsService.getSummary(month));
+			return this.getResponseWithStatus(this.budgetService.getSummary(month));
 		} else {
-			return this.getResponseWithStatus(this.ewsService.getSummary());
+			return this.getResponseWithStatus(this.budgetService.getSummary());
 		}
 	}
 

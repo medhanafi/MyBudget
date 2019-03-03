@@ -46,12 +46,13 @@ public class ItemShoppingList {
 		this.id = id;
 	}
 
-	public Float getActualAmount() {
-		return Float.parseFloat(String.valueOf(actualAmount));
+	
+	public BigDecimal getActualAmount() {
+		return actualAmount;
 	}
 
-	public void setActualAmount(Float actualAmount) {
-		this.actualAmount = BigDecimal.valueOf(actualAmount);
+	public void setActualAmount(BigDecimal actualAmount) {
+		this.actualAmount = actualAmount;
 	}
 
 	public int getActualQuantity() {

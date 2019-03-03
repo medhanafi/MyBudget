@@ -1,10 +1,12 @@
 package com.comoressoft.mybudget.dto;
 
+import java.math.BigDecimal;
+
 public class ItemDTO {
 	private int itemId;
 	private String itemLabelle;
-	private String expectedAmount;
-	private Float expectedQuantity;
+	private BigDecimal expectedAmount;
+	private int expectedQuantity;
 	private SubCategoryDTO subCategorie;
 
 	public int getItemId() {
@@ -23,19 +25,20 @@ public class ItemDTO {
 		this.itemLabelle = itemLabelle;
 	}
 
-	public String getExpectedAmount() {
+
+	public BigDecimal getExpectedAmount() {
 		return expectedAmount;
 	}
 
-	public void setExpectedAmount(String expectedAmount) {
+	public void setExpectedAmount(BigDecimal expectedAmount) {
 		this.expectedAmount = expectedAmount;
 	}
 
-	public Float getExpectedQuantity() {
+	public int getExpectedQuantity() {
 		return expectedQuantity;
 	}
 
-	public void setExpectedQuantity(Float expectedQuantity) {
+	public void setExpectedQuantity(int expectedQuantity) {
 		this.expectedQuantity = expectedQuantity;
 	}
 

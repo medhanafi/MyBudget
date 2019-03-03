@@ -1,7 +1,9 @@
 package com.comoressoft.mybudget.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -36,7 +38,7 @@ public class Category {
 	private BigDecimal categoryTotalCost;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
-	private Set<SubCategory> subCategory = new HashSet<>();
+	private List<SubCategory> subCategory = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -62,19 +64,20 @@ public class Category {
 		this.categoryState = categoryState;
 	}
 
-	public Float getCategoryTotalCost() {
-		return Float.parseFloat(String.valueOf(categoryTotalCost));
+	
+	public BigDecimal getCategoryTotalCost() {
+		return categoryTotalCost;
 	}
 
-	public void setCategoryTotalCost(Float categoryTotalCost) {
-		this.categoryTotalCost = BigDecimal.valueOf(categoryTotalCost);
+	public void setCategoryTotalCost(BigDecimal categoryTotalCost) {
+		this.categoryTotalCost = categoryTotalCost;
 	}
 
-	public Set<SubCategory> getSubCategory() {
+	public List<SubCategory> getSubCategory() {
 		return subCategory;
 	}
 
-	public void setSubCategory(Set<SubCategory> subCategory) {
+	public void setSubCategory(List<SubCategory> subCategory) {
 		this.subCategory = subCategory;
 	}
 

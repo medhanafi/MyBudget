@@ -70,12 +70,13 @@ public class Item {
 		this.itemLabelle = itemLabelle;
 	}
 
-	public Float getExpectedAmount() {
-		return Float.parseFloat(String.valueOf(expectedAmount));
+	
+	public BigDecimal getExpectedAmount() {
+		return expectedAmount;
 	}
 
-	public void setExpectedAmount(Float expectedAmount) {
-		this.expectedAmount = BigDecimal.valueOf(expectedAmount);
+	public void setExpectedAmount(BigDecimal expectedAmount) {
+		this.expectedAmount = expectedAmount;
 	}
 
 	public int getExpectedQuantity() {

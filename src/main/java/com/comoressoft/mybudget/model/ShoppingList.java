@@ -56,12 +56,12 @@ public class ShoppingList {
 		this.dateShopping = dateShopping;
 	}
 
-	public Float getAllocatedAmount() {
-		return Float.parseFloat(String.valueOf(allocatedAmount));
+	public BigDecimal getAllocatedAmount() {
+		return allocatedAmount;
 	}
 
-	public void setAllocatedAmount(Float allocatedAmount) {
-		this.allocatedAmount = BigDecimal.valueOf(allocatedAmount);
+	public void setAllocatedAmount(BigDecimal allocatedAmount) {
+		this.allocatedAmount = allocatedAmount;
 	}
 
 	public Set<ItemShoppingList> getItemShoppingList() {
