@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -24,6 +26,8 @@ public class Item {
 
 	@Id
 	@GeneratedValue(generator = "seq_item", strategy = GenerationType.SEQUENCE)
+	@GenericGenerator(name = "seq_item", strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator", parameters = {
+			@Parameter(name = "sequence_name", value = "seq_item"), @Parameter(name = "increment_size", value = "1") })
 	@Column(name = "id", nullable = false)
 	private Long id;
 
@@ -70,7 +74,6 @@ public class Item {
 		this.itemLabelle = itemLabelle;
 	}
 
-	
 	public BigDecimal getExpectedAmount() {
 		return expectedAmount;
 	}

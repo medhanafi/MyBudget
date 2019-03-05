@@ -8,7 +8,7 @@ public class CategoryDTO {
 	private String catLabel;
 	private String catState;
 	private BigDecimal catTotalCost;
-	
+
 	private List<SubCategoryDTO> subCategories;
 
 	public Long getCatId() {
@@ -42,7 +42,6 @@ public class CategoryDTO {
 	public void setCatTotalCost(BigDecimal catTotalCost) {
 		this.catTotalCost = catTotalCost;
 	}
-
 
 	public List<SubCategoryDTO> getSubCategories() {
 		return subCategories;

@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,12 +13,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.comoressoft.mybudget.dto.CategoryDTO;
+import com.comoressoft.mybudget.dto.ItemDTO;
 import com.comoressoft.mybudget.dto.SubCategoryDTO;
 import com.comoressoft.mybudget.dto.SummaryDTO;
 import com.comoressoft.mybudget.dto.TotalSummaryDTO;
@@ -265,7 +264,7 @@ public class BudgetServiceImpl {
 			catDto.setCatState(cat.getCategoryState());
 
 			this.parepare(month, cat, catDto, subCatDto);
-			//this.pareparCatDto(cat, catDto, subCatDto);
+			// this.pareparCatDto(cat, catDto, subCatDto);
 			categories.add(catDto);
 		}
 
@@ -298,8 +297,8 @@ public class BudgetServiceImpl {
 		BigDecimal catTotalCost = new BigDecimal(0);
 
 		for (SubCategory scat : cat.getSubCategory()) {
-		List<Item> items=new ArrayList<>();
-		items.addAll(scat.getItem());
+			List<Item> items = new ArrayList<>();
+			items.addAll(scat.getItem());
 			scat.getItem().clear();
 			for (Item item : items) {
 				if (item.getDateItem().getMonthValue() == month) {
@@ -328,5 +327,39 @@ public class BudgetServiceImpl {
 
 	public BigDecimal getAsDecimal(String val) {
 		return new BigDecimal(val);
+	}
+
+	public List<ItemDTO> getItems(Integer month) {
+		List<Item> items = new ArrayList<>();
+		List<ItemDTO> itemsDto = null;
+		if (month != null && month != 0) {
+			items = this.getItemsByMonth(month);
+		} else {
+			items = this.getItems();
+		}
+
+		itemsDto = itemToItemDto(items);
+
+		return itemsDto;
+	}
+
+	public List<ItemDTO> itemToItemDto(List<Item> items) {
+		List<ItemDTO> itemsDto = new ArrayList<>();
+		for (Item item : items) {
+			ItemDTO itemDto = new ItemDTO();
+			itemDto.setItemId(item.getId());
+			itemDto.setItemLabelle(item.getItemLabelle());
+			itemDto.setExpectedAmount(item.getExpectedAmount());
+			itemDto.setExpectedQuantity(item.getExpectedQuantity());
+			itemDto.setSubCategorie(item.getSubCategory().getId());
+			itemDto.setDateItem(item.getDateItem());
+			itemsDto.add(itemDto);
+		}
+		return itemsDto;
+	}
+
+	public List<ItemDTO> getItemsBySubCat(Long subCategorie) {
+		List<Item> items = itemRepository.findBySubCategory(new SubCategory(subCategorie));
+		return itemToItemDto(items);
 	}
 }

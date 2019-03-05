@@ -8,11 +8,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.comoressoft.mybudget.model.Item;
+import com.comoressoft.mybudget.model.SubCategory;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
 	List<Item> findByDateItem(LocalDate localDate);
+
 	@Query("SELECT i FROM #{#entityName} i WHERE i.dateItem >=:dateStart AND i.dateItem <=:dateEnd")
 	List<Item> findByDateItemLtAndGt(@Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
+
+	List<Item> findBySubCategory(SubCategory subCategory);
 
 }

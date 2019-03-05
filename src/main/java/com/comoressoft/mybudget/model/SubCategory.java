@@ -2,9 +2,7 @@ package com.comoressoft.mybudget.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,6 +40,13 @@ public class SubCategory {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "subCategory", orphanRemoval = true)
 	private List<Item> item = new ArrayList<>();
+
+	public SubCategory(Long subCategorie) {
+		this.id = subCategorie;
+	}
+
+	public SubCategory() {
+	}
 
 	public Long getId() {
 		return id;
