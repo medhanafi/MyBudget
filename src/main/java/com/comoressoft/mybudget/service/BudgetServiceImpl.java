@@ -77,6 +77,57 @@ public class BudgetServiceImpl {
 		return new LinkedList<>(itemRepository.findAll());
 	}
 
+	public List<SubCategoryDTO> getSubCategoryByCategory(Long catId, Integer month) {
+		List<SubCategoryDTO> subCategories = new LinkedList<>();
+		if (month != null && month != 0) {
+			subCategories = this.getSubCategoriesByMonth(catId,month);
+		} else {
+			subCategories=this.getSubCategoryByCategory(catId);
+		}
+		return subCategories;
+	}
+	private List<SubCategoryDTO> getSubCategoriesByMonth(Long catId, Integer month) {
+			List<SubCategory> listSubCat = getSubCategoryByCategry(catId);
+
+		SubCategoryDTO subCatDto = null;
+		List<SubCategoryDTO> subCategories =this.parepare(month, listSubCat, subCatDto);
+		
+		return subCategories;
+	}
+
+	private List<SubCategoryDTO>  parepare(Integer month, List<SubCategory> listSubCat, SubCategoryDTO subCatDto) {
+
+		List<SubCategoryDTO> subCategories = new LinkedList<>();
+		BigDecimal catTotalCost = new BigDecimal(0);
+
+		for (SubCategory scat : listSubCat) {
+			List<Item> items = new ArrayList<>();
+			items.addAll(scat.getItem());
+			scat.getItem().clear();
+			for (Item item : items) {
+				if (item.getDateItem().getMonthValue() == month) {
+					scat.getItem().add(item);
+
+				}
+			}
+			if (!scat.getItem().isEmpty()) {
+
+				subCatDto = new SubCategoryDTO();
+				subCatDto.setSubCatId(scat.getId());
+				subCatDto.setSubCatLabel(scat.getSubCategoryLabel());
+				subCatDto.setSubCatState(scat.getSubCategoryState());
+
+				BigDecimal subCatTotalCost = new BigDecimal(0);
+				subCatTotalCost = subCatTotalCost.add(calculatSubCatTotalCost(scat));
+				subCatDto.setSubCatTotalCost(subCatTotalCost);
+				catTotalCost = catTotalCost.add(subCatTotalCost);
+				subCategories.add(subCatDto);
+			}
+		}
+		return subCategories;
+		
+	}
+
 	public List<SubCategoryDTO> getSubCategoryByCategory(Long idCat) {
 		SubCategoryDTO scdto = null;
 		List<SubCategoryDTO> subCategories = new LinkedList<>();
@@ -97,6 +148,15 @@ public class BudgetServiceImpl {
 		Optional<Category> catData = categoryRepository.findById(idCat);
 		if (catData.isPresent()) {
 			return new LinkedHashSet<>(subCategoryRepository.findByCategory(catData.get()));
+		}
+		return null;
+
+	}
+	
+	private List<SubCategory> getSubCategoryByCategry(Long idCat) {
+		Optional<Category> catData = categoryRepository.findById(idCat);
+		if (catData.isPresent()) {
+			return new LinkedList<>(subCategoryRepository.findByCategory(catData.get()));
 		}
 		return null;
 
@@ -368,4 +428,6 @@ public class BudgetServiceImpl {
 		List<Item> items = itemRepository.findBySubCategory(new SubCategory(subCategorie));
 		return itemToItemDto(items);
 	}
+
+	
 }

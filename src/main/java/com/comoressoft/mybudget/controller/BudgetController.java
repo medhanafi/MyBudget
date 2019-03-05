@@ -52,10 +52,10 @@ public class BudgetController {
 	}
 
 	@GetMapping(value = "/subcatsBycate")
-	ResponseEntity<?> getSubCatByCat(@RequestParam(value = "cat_id", required = false) Long catId)
+	ResponseEntity<?> getSubCatByCat(@RequestParam(value = "cat_id", required = false) Long catId, @RequestParam(value = "month", required = false) Integer month)
 			throws ServiceException {
 
-		List<SubCategoryDTO> result = this.budgetService.getSubCategoryByCategory(catId);
+		List<SubCategoryDTO> result = this.budgetService.getSubCategoryByCategory(catId, month);
 		return this.getResponseWithStatus(result);
 	}
 
