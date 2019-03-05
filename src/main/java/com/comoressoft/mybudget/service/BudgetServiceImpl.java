@@ -38,6 +38,12 @@ public class BudgetServiceImpl {
 	@Autowired
 	private SubCategoryRepository subCategoryRepository;
 
+//	summaryList.sort(new Comparator<Summary>() {
+//        @Override
+//        public int compare(Summary o1, Summary o2) {
+//            return (Integer.compare(o1.getMonthPosition(), o2.getMonthPosition()));
+//        }
+//    });
 	public List<CategoryDTO> getCategories(Integer month) {
 		List<CategoryDTO> categories = new ArrayList<>();
 
