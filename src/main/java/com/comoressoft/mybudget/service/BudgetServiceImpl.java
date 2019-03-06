@@ -2,9 +2,7 @@ package com.comoressoft.mybudget.service;
 
 import java.math.BigDecimal;
 import java.text.DateFormatSymbols;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -15,6 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.comoressoft.mybudget.dto.CategoryDTO;
@@ -196,29 +195,36 @@ public class BudgetServiceImpl {
 		return sum;
 	}
 
-	private BigDecimal calculatItemsTotalCost(int month) {
-		List<Item> items = getItemsByMonth(month);
-		BigDecimal sum = new BigDecimal(0);
-		for (Item item : items) {
-			BigDecimal param = getAsDecimal(String.valueOf(item.getExpectedQuantity()))
-					.multiply(item.getExpectedAmount());
-			sum = sum.add(param);
-		}
-		return sum;
-	}
+//	private BigDecimal calculatItemsTotalCost(int month) {
+//		List<Item> items = getItemsByMonth(month);
+//		BigDecimal sum = new BigDecimal(0);
+//		for (Item item : items) {
+//			BigDecimal param = getAsDecimal(String.valueOf(item.getExpectedQuantity()))
+//					.multiply(item.getExpectedAmount());
+//			sum = sum.add(param);
+//		}
+//		return sum;
+//	}
 
-	private BigDecimal calculatRevTotalCost(int month, String revLabel) {
-		BigDecimal sum = new BigDecimal(0);
+	private Pair<BigDecimal, BigDecimal> calculatTotalCost(int month, String revLabel) {
+		BigDecimal sumRev = new BigDecimal(0);
+		BigDecimal sumDep = new BigDecimal(0);
 		List<CategoryDTO> cats = getCategories(month);
 		for (CategoryDTO cat : cats) {
-			if (cat != null && cat.getCatLabel().equalsIgnoreCase(revLabel)) {
-				if (cat.getCatTotalCost() != null) {
-					sum = sum.add(cat.getCatTotalCost());
+			if (cat != null) {
+				if (cat.getCatLabel().equalsIgnoreCase(revLabel)) {
+					if (cat.getCatTotalCost() != null) {
+						sumRev = sumRev.add(cat.getCatTotalCost());
+					}
+				} else {
+					if (cat.getCatTotalCost() != null) {
+						sumDep = sumDep.add(cat.getCatTotalCost());
+					}
 				}
 			}
 		}
 
-		return sum;
+		return Pair.of(sumRev, sumDep);
 	}
 
 	public SummaryDTO getSummary(int month) {
@@ -234,8 +240,9 @@ public class BudgetServiceImpl {
 
 		Map<String, SummaryDTO> mapSummary = new HashMap<>();
 		for (int month = 1; month < 13; month++) {
-			BigDecimal dep = calculatItemsTotalCost(month);
-			BigDecimal rev = calculatRevTotalCost(month, "Revenus");
+			Pair<BigDecimal, BigDecimal> total = calculatTotalCost(month, "Revenus");
+			BigDecimal dep = total.getSecond();
+			BigDecimal rev = total.getFirst();
 			SummaryDTO summary = new SummaryDTO();
 			summary.setMonthPosition(month);
 			TotalSummaryDTO tsummary = new TotalSummaryDTO();
@@ -256,9 +263,11 @@ public class BudgetServiceImpl {
 	}
 
 	private List<Item> getItemsByMonth(int month) {
-		LocalDate start = LocalDate.of(Calendar.getInstance().get(Calendar.YEAR), month, 1);
-		LocalDate end = LocalDate.of(Calendar.getInstance().get(Calendar.YEAR), month, start.lengthOfMonth());
-		return itemRepository.findByDateItemLtAndGt(start, end);
+		// LocalDate start = LocalDate.of(Calendar.getInstance().get(Calendar.YEAR),
+		// month, 1);
+		// LocalDate end = LocalDate.of(Calendar.getInstance().get(Calendar.YEAR),
+		// month, start.lengthOfMonth());
+		return itemRepository.findByDateItemLtAndGt(month);
 	}
 
 	public List<Category> getCategoriesEntityByMonth(int month) {
@@ -425,8 +434,8 @@ public class BudgetServiceImpl {
 		return itemsDto;
 	}
 
-	public List<ItemDTO> getItemsBySubCat(Long subCategorie) {
-		List<Item> items = itemRepository.findBySubCategory(new SubCategory(subCategorie));
+	public List<ItemDTO> getItemsBySubCat(Long subCategorie, Integer month) {
+		List<Item> items = itemRepository.findByMonthAndSubCat(month, subCategorie);
 		return itemToItemDto(items);
 	}
 

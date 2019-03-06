@@ -44,16 +44,16 @@ public class BudgetController {
 	}
 
 	@GetMapping(value = "/itemsBySubcat")
-	ResponseEntity<?> getitemsBySubCat(@RequestParam(value = "subcat_id", required = false) Long subcatId)
-			throws ServiceException {
+	ResponseEntity<?> getitemsBySubCat(@RequestParam(value = "subcat_id", required = false) Long subcatId,
+			@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
 
-		List<ItemDTO> result = this.budgetService.getItemsBySubCat(subcatId);
+		List<ItemDTO> result = this.budgetService.getItemsBySubCat(subcatId, month);
 		return this.getResponseWithStatus(result);
 	}
 
 	@GetMapping(value = "/subcatsBycate")
-	ResponseEntity<?> getSubCatByCat(@RequestParam(value = "cat_id", required = false) Long catId, @RequestParam(value = "month", required = false) Integer month)
-			throws ServiceException {
+	ResponseEntity<?> getSubCatByCat(@RequestParam(value = "cat_id", required = false) Long catId,
+			@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
 
 		List<SubCategoryDTO> result = this.budgetService.getSubCategoryByCategory(catId, month);
 		return this.getResponseWithStatus(result);
