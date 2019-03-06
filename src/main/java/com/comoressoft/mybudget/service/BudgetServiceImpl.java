@@ -49,7 +49,7 @@ public class BudgetServiceImpl {
 
 		List<Category> listCat = categoryRepository.findAll();
 		if (month != null && month != 0) {
-			categories = this.getCategoriesByMonth(month);
+			categories = this.getCategoriesByMonth(listCat, month);
 		} else {
 			this.categoryToCategoryDTO(listCat, categories);
 		}
@@ -80,52 +80,47 @@ public class BudgetServiceImpl {
 	public List<SubCategoryDTO> getSubCategoryByCategory(Long catId, Integer month) {
 		List<SubCategoryDTO> subCategories = new LinkedList<>();
 		if (month != null && month != 0) {
-			subCategories = this.getSubCategoriesByMonth(catId,month);
+			subCategories = this.getSubCategoriesByMonth(catId, month);
 		} else {
-			subCategories=this.getSubCategoryByCategory(catId);
+			subCategories = this.getSubCategoryByCategory(catId);
 		}
 		return subCategories;
 	}
+
 	private List<SubCategoryDTO> getSubCategoriesByMonth(Long catId, Integer month) {
-			List<SubCategory> listSubCat = getSubCategoryByCategry(catId);
+		List<SubCategory> listSubCat = getSubCategoryByCategry(catId);
 
 		SubCategoryDTO subCatDto = null;
-		List<SubCategoryDTO> subCategories =this.parepare(month, listSubCat, subCatDto);
-		
+		List<SubCategoryDTO> subCategories = this.parepare(month, listSubCat, subCatDto);
+
 		return subCategories;
 	}
 
-	private List<SubCategoryDTO>  parepare(Integer month, List<SubCategory> listSubCat, SubCategoryDTO subCatDto) {
+	private List<SubCategoryDTO> parepare(Integer month, List<SubCategory> listSubCat, SubCategoryDTO subCatDto) {
 
 		List<SubCategoryDTO> subCategories = new LinkedList<>();
 		BigDecimal catTotalCost = new BigDecimal(0);
 
 		for (SubCategory scat : listSubCat) {
-			List<Item> items = new ArrayList<>();
-			items.addAll(scat.getItem());
-			scat.getItem().clear();
-			for (Item item : items) {
-				if (item.getDateItem().getMonthValue() == month) {
-					scat.getItem().add(item);
 
-				}
-			}
+			subCatDto = new SubCategoryDTO();
+			subCatDto.setSubCatId(scat.getId());
+			subCatDto.setSubCatLabel(scat.getSubCategoryLabel());
+			subCatDto.setSubCatState(scat.getSubCategoryState());
+
 			if (!scat.getItem().isEmpty()) {
-
-				subCatDto = new SubCategoryDTO();
-				subCatDto.setSubCatId(scat.getId());
-				subCatDto.setSubCatLabel(scat.getSubCategoryLabel());
-				subCatDto.setSubCatState(scat.getSubCategoryState());
-
 				BigDecimal subCatTotalCost = new BigDecimal(0);
-				subCatTotalCost = subCatTotalCost.add(calculatSubCatTotalCost(scat));
+				subCatTotalCost = subCatTotalCost.add(calculatTotalCostByMonth(scat.getItem(), month));
 				subCatDto.setSubCatTotalCost(subCatTotalCost);
 				catTotalCost = catTotalCost.add(subCatTotalCost);
-				subCategories.add(subCatDto);
+
+			} else {
+				subCatDto.setSubCatTotalCost(new BigDecimal(0));
 			}
+			subCategories.add(subCatDto);
 		}
 		return subCategories;
-		
+
 	}
 
 	public List<SubCategoryDTO> getSubCategoryByCategory(Long idCat) {
@@ -152,7 +147,7 @@ public class BudgetServiceImpl {
 		return null;
 
 	}
-	
+
 	private List<SubCategory> getSubCategoryByCategry(Long idCat) {
 		Optional<Category> catData = categoryRepository.findById(idCat);
 		if (catData.isPresent()) {
@@ -175,6 +170,19 @@ public class BudgetServiceImpl {
 			categories.add(catDto);
 		}
 
+	}
+
+	private BigDecimal calculatTotalCostByMonth(List<Item> items, int month) {
+		BigDecimal sum = new BigDecimal(0);
+
+		for (Item item : items) {
+			if (item.getDateItem().getMonthValue() == month) {
+				BigDecimal param = getAsDecimal(String.valueOf(item.getExpectedQuantity()))
+						.multiply(item.getExpectedAmount());
+				sum = sum.add(param);
+			}
+		}
+		return sum;
 	}
 
 	private BigDecimal calculatSubCatTotalCost(SubCategory scat) {
@@ -201,7 +209,7 @@ public class BudgetServiceImpl {
 
 	private BigDecimal calculatRevTotalCost(int month, String revLabel) {
 		BigDecimal sum = new BigDecimal(0);
-		List<CategoryDTO> cats = getCategoriesByMonth(month);
+		List<CategoryDTO> cats = getCategories(month);
 		for (CategoryDTO cat : cats) {
 			if (cat != null && cat.getCatLabel().equalsIgnoreCase(revLabel)) {
 				if (cat.getCatTotalCost() != null) {
@@ -317,9 +325,8 @@ public class BudgetServiceImpl {
 		return subCategoriesDTO;
 	}
 
-	public List<CategoryDTO> getCategoriesByMonth(int month) {
+	public List<CategoryDTO> getCategoriesByMonth(List<Category> listCat, int month) {
 		List<CategoryDTO> categories = new LinkedList<>();
-		List<Category> listCat = getCategoriesEntityByMonth(month);
 
 		CategoryDTO catDto = null;
 		SubCategoryDTO subCatDto = null;
@@ -363,28 +370,22 @@ public class BudgetServiceImpl {
 		BigDecimal catTotalCost = new BigDecimal(0);
 
 		for (SubCategory scat : cat.getSubCategory()) {
-			List<Item> items = new ArrayList<>();
-			items.addAll(scat.getItem());
-			scat.getItem().clear();
-			for (Item item : items) {
-				if (item.getDateItem().getMonthValue() == month) {
-					scat.getItem().add(item);
 
-				}
-			}
+			subCatDto = new SubCategoryDTO();
+			subCatDto.setSubCatId(scat.getId());
+			subCatDto.setSubCatLabel(scat.getSubCategoryLabel());
+			subCatDto.setSubCatState(scat.getSubCategoryState());
+
 			if (!scat.getItem().isEmpty()) {
-
-				subCatDto = new SubCategoryDTO();
-				subCatDto.setSubCatId(scat.getId());
-				subCatDto.setSubCatLabel(scat.getSubCategoryLabel());
-				subCatDto.setSubCatState(scat.getSubCategoryState());
-
 				BigDecimal subCatTotalCost = new BigDecimal(0);
-				subCatTotalCost = subCatTotalCost.add(calculatSubCatTotalCost(scat));
+				subCatTotalCost = subCatTotalCost.add(calculatTotalCostByMonth(scat.getItem(), month));
 				subCatDto.setSubCatTotalCost(subCatTotalCost);
 				catTotalCost = catTotalCost.add(subCatTotalCost);
-				subCategories.add(subCatDto);
+
+			} else {
+				subCatDto.setSubCatTotalCost(new BigDecimal(0));
 			}
+			subCategories.add(subCatDto);
 		}
 		catDto.setCatTotalCost(catTotalCost);
 		catDto.setSubCategories(subCategories);
@@ -429,5 +430,4 @@ public class BudgetServiceImpl {
 		return itemToItemDto(items);
 	}
 
-	
 }
