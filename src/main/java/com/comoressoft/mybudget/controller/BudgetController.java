@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.comoressoft.mybudget.dto.CategoryDTO;
 import com.comoressoft.mybudget.dto.ItemDTO;
+import com.comoressoft.mybudget.dto.ItemShoppingListDTO;
 import com.comoressoft.mybudget.dto.SubCategoryDTO;
-import com.comoressoft.mybudget.model.Item;
-import com.comoressoft.mybudget.model.SubCategory;
+import com.comoressoft.mybudget.model.ShoppingList;
 import com.comoressoft.mybudget.service.BudgetServiceImpl;
 
 @RestController
@@ -62,32 +62,23 @@ public class BudgetController {
 	@PostMapping(value = "/additem")
 	ResponseEntity<?> addItem(@RequestBody ItemDTO itemDto) throws ServiceException {
 
-		Item item = this.getItemDto(itemDto);
-
-		ItemDTO result = this.getItemDto(this.budgetService.addItem(item));
+		ItemDTO result = this.budgetService.addItem(itemDto);
 		return this.getResponseWithStatus(result);
 	}
 
-	private ItemDTO getItemDto(Item item) {
-		ItemDTO itemDto = new ItemDTO();
-		itemDto.setItemId(item.getId());
-		itemDto.setItemLabelle(item.getItemLabelle());
-		itemDto.setExpectedAmount(item.getExpectedAmount());
-		itemDto.setExpectedQuantity(item.getExpectedQuantity());
-		itemDto.setSubCategorie(item.getSubCategory().getId());
-		itemDto.setDateItem(item.getDateItem());
-		return itemDto;
+	@PostMapping(value = "/createShoppingList")
+	ResponseEntity<?> createShoppingList(@RequestBody ShoppingList shop) throws ServiceException {
+
+		ShoppingList result = this.budgetService.createShoppingList(shop);
+		return this.getResponseWithStatus(result);
 	}
 
-	private Item getItemDto(ItemDTO itemDto) {
-		Item item = new Item();
-		item.setId(itemDto.getItemId());
-		item.setItemLabelle(itemDto.getItemLabelle());
-		item.setExpectedAmount(itemDto.getExpectedAmount());
-		item.setExpectedQuantity(itemDto.getExpectedQuantity());
-		item.setSubCategory(new SubCategory(itemDto.getSubCategorie()));
-		item.setDateItem(itemDto.getDateItem());
-		return item;
+	@PostMapping(value = "/addItemToShoppingList")
+	ResponseEntity<?> addItemShoppingList(@RequestParam(value = "itemId") Long itemId,
+			@RequestParam(value = "month") int month) throws ServiceException {
+
+		ItemShoppingListDTO result = this.budgetService.addItemToShoppingList(itemId, month);
+		return this.getResponseWithStatus(result);
 	}
 
 	@GetMapping(value = { "/summary/{month}", "/summary/", "/summary", "/summary{month}" })

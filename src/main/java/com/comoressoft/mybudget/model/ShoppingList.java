@@ -27,7 +27,7 @@ public class ShoppingList {
 	private Long id;
 
 	@Column(nullable = false)
-	private LocalDate dateShopping;
+	private LocalDate dateCreated;
 
 	@Column(nullable = false, precision = 10, scale = 2)
 	@Type(type = "big_decimal")
@@ -48,12 +48,12 @@ public class ShoppingList {
 		this.id = id;
 	}
 
-	public LocalDate getDateShopping() {
-		return dateShopping;
+	public LocalDate getDateCreated() {
+		return dateCreated;
 	}
 
-	public void setDateShopping(LocalDate dateShopping) {
-		this.dateShopping = dateShopping;
+	public void setDateShopping(LocalDate dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 	public BigDecimal getAllocatedAmount() {

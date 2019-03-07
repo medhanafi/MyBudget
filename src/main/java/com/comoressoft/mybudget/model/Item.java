@@ -44,6 +44,9 @@ public class Item {
 	@Column(nullable = false)
 	private LocalDate dateItem;
 
+	@Column(nullable = true, length = 25)
+	private String itemStatus;
+
 	@ManyToOne
 	private SubCategory subCategory;
 
@@ -112,6 +115,14 @@ public class Item {
 
 	public void setItemShoppingList(Set<ItemShoppingList> itemShoppingList) {
 		this.itemShoppingList = itemShoppingList;
+	}
+
+	public String getItemStatus() {
+		return itemStatus;
+	}
+
+	public void setItemStatus(String itemStatus) {
+		this.itemStatus = itemStatus;
 	}
 
 }

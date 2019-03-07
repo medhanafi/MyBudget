@@ -3,6 +3,7 @@ package com.comoressoft.mybudget.service;
 import java.math.BigDecimal;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -18,14 +19,20 @@ import org.springframework.stereotype.Service;
 
 import com.comoressoft.mybudget.dto.CategoryDTO;
 import com.comoressoft.mybudget.dto.ItemDTO;
+import com.comoressoft.mybudget.dto.ItemShoppingListDTO;
+import com.comoressoft.mybudget.dto.ShoppingListDTO;
 import com.comoressoft.mybudget.dto.SubCategoryDTO;
 import com.comoressoft.mybudget.dto.SummaryDTO;
 import com.comoressoft.mybudget.dto.TotalSummaryDTO;
 import com.comoressoft.mybudget.model.Category;
 import com.comoressoft.mybudget.model.Item;
+import com.comoressoft.mybudget.model.ItemShoppingList;
+import com.comoressoft.mybudget.model.ShoppingList;
 import com.comoressoft.mybudget.model.SubCategory;
 import com.comoressoft.mybudget.repository.CategoryRepository;
 import com.comoressoft.mybudget.repository.ItemRepository;
+import com.comoressoft.mybudget.repository.ItemShoppingListRepository;
+import com.comoressoft.mybudget.repository.ShoppingListRepository;
 import com.comoressoft.mybudget.repository.SubCategoryRepository;
 
 @Service
@@ -36,6 +43,11 @@ public class BudgetServiceImpl {
 	private ItemRepository itemRepository;
 	@Autowired
 	private SubCategoryRepository subCategoryRepository;
+
+	@Autowired
+	private ShoppingListRepository shoppingListRepository;
+	@Autowired
+	private ItemShoppingListRepository itemShoppingListRepository;
 
 //	summaryList.sort(new Comparator<Summary>() {
 //        @Override
@@ -157,18 +169,21 @@ public class BudgetServiceImpl {
 	}
 
 	private void categoryToCategoryDTO(List<Category> listCat, List<CategoryDTO> categories) {
-		CategoryDTO catDto = null;
-		SubCategoryDTO subCatDto = null;
-		for (Category cat : listCat) {
-			catDto = new CategoryDTO();
-			catDto.setCatId(cat.getId());
-			catDto.setCatLabel(cat.getCategoryLabel());
-			catDto.setCatState(cat.getCategoryState());
 
-			this.pareparCatDto(cat, catDto, subCatDto);
-			categories.add(catDto);
+		for (Category cat : listCat) {
+			categories.add(catToDto(cat));
 		}
 
+	}
+
+	private CategoryDTO catToDto(Category cat) {
+		CategoryDTO catDto = new CategoryDTO();
+		catDto.setCatId(cat.getId());
+		catDto.setCatLabel(cat.getCategoryLabel());
+		catDto.setCatState(cat.getCategoryState());
+
+		this.pareparCatDto(cat, catDto);
+		return catDto;
 	}
 
 	private BigDecimal calculatTotalCostByMonth(List<Item> items, int month) {
@@ -353,25 +368,31 @@ public class BudgetServiceImpl {
 		return categories;
 	}
 
-	private void pareparCatDto(Category cat, CategoryDTO catDto, SubCategoryDTO subCatDto) {
+	private void pareparCatDto(Category cat, CategoryDTO catDto) {
 		List<SubCategoryDTO> subCategories = new LinkedList<>();
-
 		BigDecimal catTotalCost = new BigDecimal(0);
 		for (SubCategory scat : cat.getSubCategory()) {
-			subCatDto = new SubCategoryDTO();
-			subCatDto.setSubCatId(scat.getId());
-			subCatDto.setSubCatLabel(scat.getSubCategoryLabel());
-			subCatDto.setSubCatState(scat.getSubCategoryState());
-
-			BigDecimal subCatTotalCost = new BigDecimal(0);
-			subCatTotalCost = subCatTotalCost.add(calculatSubCatTotalCost(scat));
-			subCatDto.setSubCatTotalCost(subCatTotalCost);
-			catTotalCost = catTotalCost.add(subCatTotalCost);
+			SubCategoryDTO subCatDto = subCatToDto(scat);
 			subCategories.add(subCatDto);
+			catTotalCost = catTotalCost.add(subCatDto.getSubCatTotalCost());
 		}
 		catDto.setCatTotalCost(catTotalCost);
 		catDto.setSubCategories(subCategories);
 
+	}
+
+	private SubCategoryDTO subCatToDto(SubCategory scat) {
+		SubCategoryDTO subCatDto = new SubCategoryDTO();
+		subCatDto = new SubCategoryDTO();
+		subCatDto.setSubCatId(scat.getId());
+		subCatDto.setSubCatLabel(scat.getSubCategoryLabel());
+		subCatDto.setSubCatState(scat.getSubCategoryState());
+
+		BigDecimal subCatTotalCost = new BigDecimal(0);
+		subCatTotalCost = subCatTotalCost.add(calculatSubCatTotalCost(scat));
+		subCatDto.setSubCatTotalCost(subCatTotalCost);
+
+		return subCatDto;
 	}
 
 	private void parepare(int month, Category cat, CategoryDTO catDto, SubCategoryDTO subCatDto) {
@@ -422,21 +443,117 @@ public class BudgetServiceImpl {
 	public List<ItemDTO> itemToItemDto(List<Item> items) {
 		List<ItemDTO> itemsDto = new ArrayList<>();
 		for (Item item : items) {
-			ItemDTO itemDto = new ItemDTO();
+			if (!item.getSubCategory().getCategory().getCategoryLabel().equals("Revenus")) {
+				itemsDto.add(itemToitemDto(item));
+			}
+		}
+		return itemsDto;
+	}
+
+	private ItemDTO itemToitemDto(Item item) {
+		ItemDTO itemDto = new ItemDTO();
+		if (item != null) {
 			itemDto.setItemId(item.getId());
 			itemDto.setItemLabelle(item.getItemLabelle());
 			itemDto.setExpectedAmount(item.getExpectedAmount());
 			itemDto.setExpectedQuantity(item.getExpectedQuantity());
-			itemDto.setSubCategorie(item.getSubCategory().getId());
+			itemDto.setSubCategorie(subCatToDto(item.getSubCategory()));
+			itemDto.setItemStatus(item.getItemStatus());
 			itemDto.setDateItem(item.getDateItem());
-			itemsDto.add(itemDto);
 		}
-		return itemsDto;
+		return itemDto;
+	}
+
+	private Item itemDtoToItem(ItemDTO itemDto) {
+		Item item = new Item();
+		if (item != null) {
+			item.setId(itemDto.getItemId());
+			item.setItemLabelle(itemDto.getItemLabelle());
+			item.setExpectedAmount(itemDto.getExpectedAmount());
+			item.setExpectedQuantity(itemDto.getExpectedQuantity());
+			item.setSubCategory(subCatDtoToSubCat(itemDto.getSubCategorie()));
+			item.setItemStatus(itemDto.getItemStatus());
+			item.setDateItem(itemDto.getDateItem());
+		}
+		return item;
+	}
+
+	private SubCategory subCatDtoToSubCat(SubCategoryDTO subCateDto) {
+		SubCategory subCat = new SubCategory();
+		if (subCateDto != null) {
+			subCat.setId(subCateDto.getSubCatId());
+			subCat.setSubCategoryLabel(subCateDto.getSubCatLabel());
+			subCat.setSubCategoryState(subCateDto.getSubCatState());
+			subCat.setSubCategoryTotalCost(subCateDto.getSubCatTotalCost());
+			subCat.setItem(this.getItemsBySubCat(subCateDto.getSubCatId()));
+		}
+		return subCat;
+	}
+
+	private List<Item> getItemsBySubCat(Long subCatId) {
+		return itemRepository.findBySubCategory(new SubCategory(subCatId));
 	}
 
 	public List<ItemDTO> getItemsBySubCat(Long subCategorie, Integer month) {
 		List<Item> items = itemRepository.findByMonthAndSubCat(month, subCategorie);
 		return itemToItemDto(items);
+	}
+
+	public ItemDTO addItem(ItemDTO itemDto) {
+		Item item = this.addItem(itemDtoToItem(itemDto));
+		return itemToitemDto(item);
+	}
+
+	public ShoppingList createShoppingList(ShoppingList shop) {
+		shoppingListRepository.save(shop);
+		return null;
+	}
+
+	public ItemShoppingListDTO addItemToShoppingList(Long itemId, int month) {
+		ItemShoppingList iShopList = new ItemShoppingList();
+
+		iShopList.setItem(this.itemRepository.findById(itemId).get());
+		iShopList.setShoppingList(this.getCurrentShoppingList(month));
+
+		ItemShoppingList ishopResult = this.itemShoppingListRepository.save(iShopList);
+		if (ishopResult != null) {
+			this.itemRepository.sa
+			ItemShoppingListDTO dto = itemShopToDto(ishopResult);
+		}
+		return dto;
+	}
+
+	private ShoppingList getCurrentShoppingList(int month) {
+		List<ShoppingList> lists = shoppingListRepository.findByCurrentDate(month);
+		if (!lists.isEmpty()) {
+			lists.sort(new Comparator<ShoppingList>() {
+				@Override
+				public int compare(ShoppingList o1, ShoppingList o2) {
+					return o2.getDateCreated().compareTo(o1.getDateCreated());
+				}
+			});
+			return lists.get(0);
+		} else {
+			return new ShoppingList();
+		}
+
+	}
+
+	private ItemShoppingListDTO itemShopToDto(ItemShoppingList ishopResult) {
+		ItemShoppingListDTO itemDto = new ItemShoppingListDTO();
+		itemDto.setActualAmount(ishopResult.getActualAmount());
+		itemDto.setActualQuantity(ishopResult.getActualQuantity());
+		itemDto.setPurchasedDate(ishopResult.getPurchasedDate());
+		itemDto.setItem(itemToitemDto(ishopResult.getItem()));
+		itemDto.setShoppingList(shoppingListToDto(ishopResult.getShoppingList()));
+		return itemDto;
+	}
+
+	private ShoppingListDTO shoppingListToDto(ShoppingList shoppingList) {
+		ShoppingListDTO shopDto = new ShoppingListDTO();
+		shopDto.setAllocatedAmount(shoppingList.getAllocatedAmount());
+		shopDto.setDateCreated(shoppingList.getDateCreated());
+		return shopDto;
 	}
 
 }

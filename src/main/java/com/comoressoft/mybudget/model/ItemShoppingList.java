@@ -26,10 +26,10 @@ public class ItemShoppingList {
 	@Type(type = "big_decimal")
 	private BigDecimal actualAmount;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private int actualQuantity;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private LocalDate purchasedDate;
 
 	@ManyToOne
@@ -46,7 +46,6 @@ public class ItemShoppingList {
 		this.id = id;
 	}
 
-	
 	public BigDecimal getActualAmount() {
 		return actualAmount;
 	}

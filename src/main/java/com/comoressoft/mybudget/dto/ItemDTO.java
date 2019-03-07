@@ -9,7 +9,8 @@ public class ItemDTO {
 	private BigDecimal expectedAmount;
 	private int expectedQuantity;
 	private LocalDate dateItem;
-	private Long subCategorie;
+	private SubCategoryDTO subCategorie;
+	private String itemStatus;
 
 	public Long getItemId() {
 		return itemId;
@@ -43,20 +44,28 @@ public class ItemDTO {
 		this.expectedQuantity = expectedQuantity;
 	}
 
-	public Long getSubCategorie() {
-		return subCategorie;
-	}
-
-	public void setSubCategorie(Long subCategorie) {
-		this.subCategorie = subCategorie;
-	}
-
 	public LocalDate getDateItem() {
 		return dateItem;
 	}
 
 	public void setDateItem(LocalDate dateItem) {
 		this.dateItem = dateItem;
+	}
+
+	public SubCategoryDTO getSubCategorie() {
+		return subCategorie;
+	}
+
+	public void setSubCategorie(SubCategoryDTO subCategorie) {
+		this.subCategorie = subCategorie;
+	}
+
+	public String getItemStatus() {
+		return itemStatus;
+	}
+
+	public void setItemStatus(String itemStatus) {
+		this.itemStatus = itemStatus;
 	}
 
 }
