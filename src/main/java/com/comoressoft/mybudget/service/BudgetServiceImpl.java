@@ -514,11 +514,13 @@ public class BudgetServiceImpl {
 
 		iShopList.setItem(this.itemRepository.findById(itemId).get());
 		iShopList.setShoppingList(this.getCurrentShoppingList(month));
-
+		ItemShoppingListDTO dto=new ItemShoppingListDTO();
 		ItemShoppingList ishopResult = this.itemShoppingListRepository.save(iShopList);
 		if (ishopResult != null) {
-			this.itemRepository.sa
-			ItemShoppingListDTO dto = itemShopToDto(ishopResult);
+			Item it=ishopResult.getItem();
+			it.setItemStatus("in_shopping_list");
+			this.itemRepository.save(it);
+			dto = itemShopToDto(ishopResult);
 		}
 		return dto;
 	}
