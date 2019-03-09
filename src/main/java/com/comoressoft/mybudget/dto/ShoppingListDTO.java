@@ -5,8 +5,18 @@ import java.time.LocalDate;
 
 public class ShoppingListDTO {
 
+	private String shoppingListName;
+	
 	private LocalDate dateCreated;
 	private BigDecimal allocatedAmount;
+
+	public String getShoppingListName() {
+		return shoppingListName;
+	}
+
+	public void setShoppingListName(String shoppingListName) {
+		this.shoppingListName = shoppingListName;
+	}
 
 	public LocalDate getDateCreated() {
 		return dateCreated;

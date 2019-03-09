@@ -26,6 +26,9 @@ public class ShoppingList {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
+	@Column(nullable = false, length = 130)
+	private String shoppingListName;
+	
 	@Column(nullable = false)
 	private LocalDate dateCreated;
 
@@ -46,6 +49,19 @@ public class ShoppingList {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+
+	public String getShoppingListName() {
+		return shoppingListName;
+	}
+
+	public void setShoppingListName(String shoppingListName) {
+		this.shoppingListName = shoppingListName;
+	}
+
+	public void setDateCreated(LocalDate dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 	public LocalDate getDateCreated() {

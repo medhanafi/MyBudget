@@ -22,14 +22,13 @@ public class ItemShoppingList {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(nullable = true, precision = 10, scale = 2)
+	@Column(precision = 10, scale = 2)
 	@Type(type = "big_decimal")
 	private BigDecimal actualAmount;
 
-	@Column(nullable = true)
+
 	private int actualQuantity;
 
-	@Column(nullable = true)
 	private LocalDate purchasedDate;
 
 	@ManyToOne

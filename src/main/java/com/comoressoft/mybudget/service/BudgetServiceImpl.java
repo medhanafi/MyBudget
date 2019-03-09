@@ -2,6 +2,7 @@ package com.comoressoft.mybudget.service;
 
 import java.math.BigDecimal;
 import java.text.DateFormatSymbols;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -524,6 +525,8 @@ public class BudgetServiceImpl {
 		}
 		return dto;
 	}
+	
+	
 
 	private ShoppingList getCurrentShoppingList(int month) {
 		List<ShoppingList> lists = shoppingListRepository.findByCurrentDate(month);
@@ -536,7 +539,11 @@ public class BudgetServiceImpl {
 			});
 			return lists.get(0);
 		} else {
-			return new ShoppingList();
+			
+			ShoppingList shl= new ShoppingList();
+			shl.setAllocatedAmount(new BigDecimal(20));
+			shl.setDateShopping(LocalDate.now());
+			return shoppingListRepository.save(shl);
 		}
 
 	}
