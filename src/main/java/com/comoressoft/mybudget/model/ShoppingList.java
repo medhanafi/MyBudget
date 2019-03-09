@@ -26,7 +26,7 @@ public class ShoppingList {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(nullable = false, length = 130)
+	@Column( length = 130)
 	private String shoppingListName;
 	
 	@Column(nullable = false)
