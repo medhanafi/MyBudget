@@ -13,4 +13,5 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingList, Long
 	@Query("SELECT s FROM #{#entityName} s WHERE extract(month from s.dateCreated)=:monthValue")
 	List<ShoppingList> findByCurrentDate(@Param("monthValue") int month);
 
+
 }

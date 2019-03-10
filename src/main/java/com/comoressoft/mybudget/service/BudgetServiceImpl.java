@@ -505,21 +505,19 @@ public class BudgetServiceImpl {
 		return itemToitemDto(item);
 	}
 
-	public ShoppingList createShoppingList(ShoppingList shop) {
-		shoppingListRepository.save(shop);
-		return null;
-	}
+	
 
-	public ItemShoppingListDTO addItemToShoppingList(Long itemId, int month) {
+	public ItemShoppingListDTO addItemToShoppingList(Long itemId, Long idSHL) {
 		ItemShoppingList iShopList = new ItemShoppingList();
-
-		iShopList.setItem(this.itemRepository.findById(itemId).get());
-		iShopList.setShoppingList(this.getCurrentShoppingList(month));
+Item item=this.itemRepository.findById(itemId).get();
+ShoppingList shl=this.shoppingListRepository.findById(idSHL).get();
+		iShopList.setItem(item);
+		iShopList.setShoppingList(shl);
 		ItemShoppingListDTO dto=new ItemShoppingListDTO();
 		ItemShoppingList ishopResult = this.itemShoppingListRepository.save(iShopList);
 		if (ishopResult != null) {
 			Item it=ishopResult.getItem();
-			it.setItemStatus("in_shopping_list");
+			it.setItemStatus(shl.getShoppingListName());
 			this.itemRepository.save(it);
 			dto = itemShopToDto(ishopResult);
 		}
@@ -560,9 +558,47 @@ public class BudgetServiceImpl {
 
 	private ShoppingListDTO shoppingListToDto(ShoppingList shoppingList) {
 		ShoppingListDTO shopDto = new ShoppingListDTO();
+		shopDto.setId(shoppingList.getId());
 		shopDto.setAllocatedAmount(shoppingList.getAllocatedAmount());
 		shopDto.setDateCreated(shoppingList.getDateCreated());
+		shopDto.setShoppingListName(shoppingList.getShoppingListName());
 		return shopDto;
+	}
+
+	public List<ShoppingListDTO> getShoppingLists(Integer month) {
+		List<ShoppingList> lists = shoppingListRepository.findByCurrentDate(month);
+		List<ShoppingListDTO> listDto=new ArrayList<>();
+		for(ShoppingList shl:lists) {
+			listDto.add(shoppingListToDto(shl));
+		}
+		return listDto;
+	}
+	
+	
+	
+	public ShoppingListDTO addShoppingLists(ShoppingList shl) {
+		shl.setDateCreated(LocalDate.now());
+		ShoppingList shlist = shoppingListRepository.save(shl);
+		return shoppingListToDto(shlist);
+	}
+
+	public List<ItemShoppingListDTO> getItemShoppingList(Long idSHL) {
+		List<ItemShoppingList> lists = itemShoppingListRepository.findByShoppingList(new ShoppingList(idSHL));
+		List<ItemShoppingListDTO> listDto=new ArrayList<>();
+		for(ItemShoppingList shl:lists) {
+			listDto.add(itemShoppingListToDto(shl));
+		}
+		return listDto;
+	}
+
+	private ItemShoppingListDTO itemShoppingListToDto(ItemShoppingList shl) {
+		ItemShoppingListDTO iShlDto=new ItemShoppingListDTO();
+		iShlDto.setActualAmount(shl.getActualAmount());
+		iShlDto.setActualQuantity(shl.getActualQuantity());
+		iShlDto.setPurchasedDate(shl.getPurchasedDate());
+		iShlDto.setItem(itemToitemDto(shl.getItem()));
+		iShlDto.setShoppingList(shoppingListToDto(shl.getShoppingList()));
+		return iShlDto;
 	}
 
 }

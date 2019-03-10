@@ -43,6 +43,14 @@ public class ShoppingList {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingList", orphanRemoval = true)
 	private Set<ItemShoppingList> itemShoppingList = new HashSet<>();
 
+	public ShoppingList(Long idSHL) {
+		this.id=idSHL;
+	}
+
+	public ShoppingList() {
+		super();
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 public class ShoppingListDTO {
 
+	private Long id;
 	private String shoppingListName;
 	
 	private LocalDate dateCreated;
@@ -32,6 +33,14 @@ public class ShoppingListDTO {
 
 	public void setAllocatedAmount(BigDecimal allocatedAmount) {
 		this.allocatedAmount = allocatedAmount;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }

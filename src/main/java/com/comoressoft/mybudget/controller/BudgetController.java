@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.comoressoft.mybudget.dto.CategoryDTO;
 import com.comoressoft.mybudget.dto.ItemDTO;
 import com.comoressoft.mybudget.dto.ItemShoppingListDTO;
+import com.comoressoft.mybudget.dto.ShoppingListDTO;
 import com.comoressoft.mybudget.dto.SubCategoryDTO;
 import com.comoressoft.mybudget.model.ShoppingList;
 import com.comoressoft.mybudget.service.BudgetServiceImpl;
@@ -66,18 +67,32 @@ public class BudgetController {
 		return this.getResponseWithStatus(result);
 	}
 
-	@PostMapping(value = "/createShoppingList")
+	@PostMapping(value = "/addShoppingList")
 	ResponseEntity<?> createShoppingList(@RequestBody ShoppingList shop) throws ServiceException {
 
-		ShoppingList result = this.budgetService.createShoppingList(shop);
+		ShoppingListDTO result = this.budgetService.addShoppingLists(shop);
 		return this.getResponseWithStatus(result);
 	}
 
 	@PostMapping(value = "/addItemToShoppingList")
 	ResponseEntity<?> addItemShoppingList(@RequestParam(value = "itemId") Long itemId,
-			@RequestParam(value = "month") int month) throws ServiceException {
+			@RequestParam(value = "idSHL") Long idSHL) throws ServiceException {
 
-		ItemShoppingListDTO result = this.budgetService.addItemToShoppingList(itemId, month);
+		ItemShoppingListDTO result = this.budgetService.addItemToShoppingList(itemId, idSHL);
+		return this.getResponseWithStatus(result);
+	}
+	
+	@GetMapping(value = "itemShoppingList")
+	ResponseEntity<?> getItemShoppingList(@RequestParam(value = "idSHL") Long idSHL) throws ServiceException {
+
+		List<ItemShoppingListDTO> result = this.budgetService.getItemShoppingList(idSHL);
+		return this.getResponseWithStatus(result);
+	}
+	
+	@GetMapping(value = "/shoppingLists")
+	ResponseEntity<?> getShoppingLists(@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
+
+		List<ShoppingListDTO> result = this.budgetService.getShoppingLists(month);
 		return this.getResponseWithStatus(result);
 	}
 
