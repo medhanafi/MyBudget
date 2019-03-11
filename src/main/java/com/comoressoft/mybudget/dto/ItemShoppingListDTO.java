@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 public class ItemShoppingListDTO {
 
+	private Long id;
 	private BigDecimal actualAmount;
 	private int actualQuantity;
 	private LocalDate purchasedDate;
@@ -49,6 +50,14 @@ public class ItemShoppingListDTO {
 
 	public void setShoppingList(ShoppingListDTO shoppingList) {
 		this.shoppingList = shoppingList;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }

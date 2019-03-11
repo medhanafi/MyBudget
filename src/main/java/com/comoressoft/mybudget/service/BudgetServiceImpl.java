@@ -505,27 +505,36 @@ public class BudgetServiceImpl {
 		return itemToitemDto(item);
 	}
 
-	
-
 	public ItemShoppingListDTO addItemToShoppingList(Long itemId, Long idSHL) {
 		ItemShoppingList iShopList = new ItemShoppingList();
-Item item=this.itemRepository.findById(itemId).get();
-ShoppingList shl=this.shoppingListRepository.findById(idSHL).get();
-		iShopList.setItem(item);
-		iShopList.setShoppingList(shl);
-		ItemShoppingListDTO dto=new ItemShoppingListDTO();
-		ItemShoppingList ishopResult = this.itemShoppingListRepository.save(iShopList);
-		if (ishopResult != null) {
-			Item it=ishopResult.getItem();
-			it.setItemStatus(shl.getShoppingListName());
-			this.itemRepository.save(it);
-			dto = itemShopToDto(ishopResult);
+		ItemShoppingListDTO dto = new ItemShoppingListDTO();
+
+		Item item = this.itemRepository.findById(itemId).get();
+		ShoppingList shl = this.shoppingListRepository.findById(idSHL).get();
+
+		ItemShoppingList ISHL = this.itemShoppingListRepository.findByShoppingListAndItem(shl, item);
+
+		if (ISHL == null) {
+			iShopList.setItem(item);
+			iShopList.setShoppingList(shl);
+			iShopList = this.itemShoppingListRepository.save(iShopList);
+			if (iShopList != null) {
+				Item it = iShopList.getItem();
+				it.setItemStatus(shl.getShoppingListName());
+				this.itemRepository.save(it);
+				dto = itemShopToDto(iShopList);
+			}
+
+		} else {
+			ISHL.setActualQuantity(ISHL.getActualQuantity() + 1);
+			ISHL = this.itemShoppingListRepository.save(ISHL);
+			dto = itemShopToDto(ISHL);
 		}
+
 		return dto;
 	}
-	
-	
 
+	@SuppressWarnings("unused")
 	private ShoppingList getCurrentShoppingList(int month) {
 		List<ShoppingList> lists = shoppingListRepository.findByCurrentDate(month);
 		if (!lists.isEmpty()) {
@@ -537,8 +546,8 @@ ShoppingList shl=this.shoppingListRepository.findById(idSHL).get();
 			});
 			return lists.get(0);
 		} else {
-			
-			ShoppingList shl= new ShoppingList();
+
+			ShoppingList shl = new ShoppingList();
 			shl.setAllocatedAmount(new BigDecimal(20));
 			shl.setDateShopping(LocalDate.now());
 			return shoppingListRepository.save(shl);
@@ -567,15 +576,13 @@ ShoppingList shl=this.shoppingListRepository.findById(idSHL).get();
 
 	public List<ShoppingListDTO> getShoppingLists(Integer month) {
 		List<ShoppingList> lists = shoppingListRepository.findByCurrentDate(month);
-		List<ShoppingListDTO> listDto=new ArrayList<>();
-		for(ShoppingList shl:lists) {
+		List<ShoppingListDTO> listDto = new ArrayList<>();
+		for (ShoppingList shl : lists) {
 			listDto.add(shoppingListToDto(shl));
 		}
 		return listDto;
 	}
-	
-	
-	
+
 	public ShoppingListDTO addShoppingLists(ShoppingList shl) {
 		shl.setDateCreated(LocalDate.now());
 		ShoppingList shlist = shoppingListRepository.save(shl);
@@ -584,15 +591,16 @@ ShoppingList shl=this.shoppingListRepository.findById(idSHL).get();
 
 	public List<ItemShoppingListDTO> getItemShoppingList(Long idSHL) {
 		List<ItemShoppingList> lists = itemShoppingListRepository.findByShoppingList(new ShoppingList(idSHL));
-		List<ItemShoppingListDTO> listDto=new ArrayList<>();
-		for(ItemShoppingList shl:lists) {
+		List<ItemShoppingListDTO> listDto = new ArrayList<>();
+		for (ItemShoppingList shl : lists) {
 			listDto.add(itemShoppingListToDto(shl));
 		}
 		return listDto;
 	}
 
 	private ItemShoppingListDTO itemShoppingListToDto(ItemShoppingList shl) {
-		ItemShoppingListDTO iShlDto=new ItemShoppingListDTO();
+		ItemShoppingListDTO iShlDto = new ItemShoppingListDTO();
+		iShlDto.setId(shl.getId());
 		iShlDto.setActualAmount(shl.getActualAmount());
 		iShlDto.setActualQuantity(shl.getActualQuantity());
 		iShlDto.setPurchasedDate(shl.getPurchasedDate());
