@@ -1,0 +1,322 @@
+{
+	"info": {
+		"_postman_id": "38809a4a-ac22-4246-bd4a-f3d2334a248f",
+		"name": "Personal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/api/categories",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/api/categories/?month=3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/api/categories/?month=3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"categories",
+						""
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10.60.26.137:8080/api/items?month=3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "10.60.26.137:8080/api/items?month=3",
+					"host": [
+						"10",
+						"60",
+						"26",
+						"137"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"items"
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/api/additem",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"itemId\": 965,\n        \"itemStatus\": \"not_used\"\n    }"
+				},
+				"url": {
+					"raw": "localhost:8080/api/additem",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"additem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10.60.26.137:8080/api/summary",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "10.60.26.137:8080/api/summary",
+					"host": [
+						"10",
+						"60",
+						"26",
+						"137"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"summary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://10.60.26.137:8080/api/itemsBySubcat/?month=3&subcat_id=21",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://10.60.26.137:8080/api/itemsBySubcat/?month=3&subcat_id=21",
+					"protocol": "http",
+					"host": [
+						"10",
+						"60",
+						"26",
+						"137"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"itemsBySubcat",
+						""
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "3"
+						},
+						{
+							"key": "subcat_id",
+							"value": "21"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/api/subcatsBycate?cat_id=4&month=2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/api/subcatsBycate?cat_id=4&month=2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"subcatsBycate"
+					],
+					"query": [
+						{
+							"key": "cat_id",
+							"value": "4"
+						},
+						{
+							"key": "month",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10.60.26.137:8080/api/createShoppingList",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"dateCreated\":\"2019-03-07\",\n\t\"allocatedAmount\":\"89\"\n}"
+				},
+				"url": {
+					"raw": "10.60.26.137:8080/api/createShoppingList",
+					"host": [
+						"10",
+						"60",
+						"26",
+						"137"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"createShoppingList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10.60.26.137:8080/api/addItemToShoppingList?itemId=973&month=3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "10.60.26.137:8080/api/addItemToShoppingList?itemId=973&month=3",
+					"host": [
+						"10",
+						"60",
+						"26",
+						"137"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"addItemToShoppingList"
+					],
+					"query": [
+						{
+							"key": "itemId",
+							"value": "973"
+						},
+						{
+							"key": "month",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10.60.26.137:8080/api/itemShoppingList?idSHL=52",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "10.60.26.137:8080/api/itemShoppingList?idSHL=52",
+					"host": [
+						"10",
+						"60",
+						"26",
+						"137"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"itemShoppingList"
+					],
+					"query": [
+						{
+							"key": "idSHL",
+							"value": "52"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
