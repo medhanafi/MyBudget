@@ -26,7 +26,6 @@ public class ItemShoppingList {
 	@Type(type = "big_decimal")
 	private BigDecimal actualAmount;
 
-
 	private int actualQuantity;
 
 	private LocalDate purchasedDate;

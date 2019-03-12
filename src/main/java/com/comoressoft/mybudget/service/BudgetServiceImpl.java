@@ -534,6 +534,10 @@ public class BudgetServiceImpl {
 		return dto;
 	}
 
+	public ItemShoppingListDTO updateItemShoppingList(ItemShoppingListDTO ishlToupdate) {
+		return itemShopToDto(this.itemShoppingListRepository.save(ishlToDtoToItemShoppingList(ishlToupdate)));
+	}
+
 	@SuppressWarnings("unused")
 	private ShoppingList getCurrentShoppingList(int month) {
 		List<ShoppingList> lists = shoppingListRepository.findByCurrentDate(month);
@@ -557,6 +561,7 @@ public class BudgetServiceImpl {
 
 	private ItemShoppingListDTO itemShopToDto(ItemShoppingList ishopResult) {
 		ItemShoppingListDTO itemDto = new ItemShoppingListDTO();
+		itemDto.setId(ishopResult.getId());
 		itemDto.setActualAmount(ishopResult.getActualAmount());
 		itemDto.setActualQuantity(ishopResult.getActualQuantity());
 		itemDto.setPurchasedDate(ishopResult.getPurchasedDate());
@@ -572,6 +577,15 @@ public class BudgetServiceImpl {
 		shopDto.setDateCreated(shoppingList.getDateCreated());
 		shopDto.setShoppingListName(shoppingList.getShoppingListName());
 		return shopDto;
+	}
+
+	private ShoppingList shoppingListDtoToSh(ShoppingListDTO shoppingList) {
+		ShoppingList shop = new ShoppingList();
+		shop.setId(shoppingList.getId());
+		shop.setAllocatedAmount(shoppingList.getAllocatedAmount());
+		shop.setDateCreated(shoppingList.getDateCreated());
+		shop.setShoppingListName(shoppingList.getShoppingListName());
+		return shop;
 	}
 
 	public List<ShoppingListDTO> getShoppingLists(Integer month) {
@@ -607,6 +621,17 @@ public class BudgetServiceImpl {
 		iShlDto.setItem(itemToitemDto(shl.getItem()));
 		iShlDto.setShoppingList(shoppingListToDto(shl.getShoppingList()));
 		return iShlDto;
+	}
+
+	private ItemShoppingList ishlToDtoToItemShoppingList(ItemShoppingListDTO shl) {
+		ItemShoppingList iShl = new ItemShoppingList();
+		iShl.setId(shl.getId());
+		iShl.setActualAmount(shl.getActualAmount());
+		iShl.setActualQuantity(shl.getActualQuantity());
+		iShl.setPurchasedDate(shl.getPurchasedDate());
+		iShl.setItem(itemDtoToItem(shl.getItem()));
+		iShl.setShoppingList(shoppingListDtoToSh(shl.getShoppingList()));
+		return iShl;
 	}
 
 }

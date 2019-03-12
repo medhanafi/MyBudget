@@ -81,16 +81,24 @@ public class BudgetController {
 		ItemShoppingListDTO result = this.budgetService.addItemToShoppingList(itemId, idSHL);
 		return this.getResponseWithStatus(result);
 	}
-	
+
+	@PostMapping(value = "/updateItemShoppingList")
+	ResponseEntity<?> updateItemShoppingList(@RequestBody ItemShoppingListDTO shop) throws ServiceException {
+
+		ItemShoppingListDTO result = this.budgetService.updateItemShoppingList(shop);
+		return this.getResponseWithStatus(result);
+	}
+
 	@GetMapping(value = "itemShoppingList")
 	ResponseEntity<?> getItemShoppingList(@RequestParam(value = "idSHL") Long idSHL) throws ServiceException {
 
 		List<ItemShoppingListDTO> result = this.budgetService.getItemShoppingList(idSHL);
 		return this.getResponseWithStatus(result);
 	}
-	
+
 	@GetMapping(value = "/shoppingLists")
-	ResponseEntity<?> getShoppingLists(@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
+	ResponseEntity<?> getShoppingLists(@RequestParam(value = "month", required = false) Integer month)
+			throws ServiceException {
 
 		List<ShoppingListDTO> result = this.budgetService.getShoppingLists(month);
 		return this.getResponseWithStatus(result);
