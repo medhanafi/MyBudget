@@ -520,7 +520,7 @@ public class BudgetServiceImpl {
 			iShopList = this.itemShoppingListRepository.save(iShopList);
 			if (iShopList != null) {
 				Item it = iShopList.getItem();
-				it.setItemStatus(shl.getShoppingListName());
+				it.setItemStatus("used");
 				this.itemRepository.save(it);
 				dto = itemShopToDto(iShopList);
 			}
