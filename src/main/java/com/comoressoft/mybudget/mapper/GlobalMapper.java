@@ -1,0 +1,58 @@
+package com.comoressoft.mybudget.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+
+import com.comoressoft.mybudget.dto.CategoryDTO;
+import com.comoressoft.mybudget.dto.SubCategoryDTO;
+import com.comoressoft.mybudget.entity.Category;
+import com.comoressoft.mybudget.entity.SubCategory;
+
+@Mapper(componentModel = "spring")
+public interface GlobalMapper {
+	/**
+	 * 
+	 * @param category
+	 * @return categoryDTO
+	 */
+	@Mappings({ @Mapping(target = "catId", source = "id"), @Mapping(target = "catLabel", source = "categoryLabel"),
+			@Mapping(target = "catState", source = "categoryState"),
+			@Mapping(target = "catTotalCost", source = "categoryTotalCost"),
+			@Mapping(target = "subCategories", source = "subCategory") })
+	CategoryDTO categoryToCategoryDTO(Category category);
+
+	/**
+	 * 
+	 * @param categoryDTO
+	 * @return category
+	 */
+	@Mappings({ @Mapping(target = "id", source = "catId"), @Mapping(target = "categoryLabel", source = "catLabel"),
+			@Mapping(target = "categoryState", source = "catState"),
+			@Mapping(target = "categoryTotalCost", source = "catTotalCost"),
+			@Mapping(target = "subCategory", source = "subCategories") })
+	Category categoryDTOToCategory(CategoryDTO categoryDTO);
+
+	/**
+	 * 
+	 * @param subCategory
+	 * @return subCategoryDTO
+	 */
+	@Mappings({ @Mapping(target = "subCatId", source = "id"),
+			@Mapping(target = "subCatLabel", source = "subCategoryLabel"),
+			@Mapping(target = "subCatState", source = "subCategoryState"),
+			@Mapping(target = "subCatTotalCost", source = "subCategoryTotalCost") })
+	SubCategoryDTO subCategoryToSubCategoryDTO(SubCategory subCategory);
+
+	/**
+	 * 
+	 * @param subCategoryDTO
+	 * @return subCategory
+	 */
+	@Mappings({ @Mapping(target = "id", source = "subCatId"),
+			@Mapping(target = "subCategoryLabel", source = "subCatLabel"),
+			@Mapping(target = "subCategoryState", source = "subCatState"),
+			@Mapping(target = "subCategoryTotalCost", source = "subCatTotalCost") })
+	SubCategory subCategoryDTOToSubCategory(SubCategoryDTO subCategoryDTO);
+
+}

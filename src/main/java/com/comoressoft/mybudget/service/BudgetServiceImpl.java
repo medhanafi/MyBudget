@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,12 @@ import com.comoressoft.mybudget.dto.ShoppingListDTO;
 import com.comoressoft.mybudget.dto.SubCategoryDTO;
 import com.comoressoft.mybudget.dto.SummaryDTO;
 import com.comoressoft.mybudget.dto.TotalSummaryDTO;
-import com.comoressoft.mybudget.model.Category;
-import com.comoressoft.mybudget.model.Item;
-import com.comoressoft.mybudget.model.ItemShoppingList;
-import com.comoressoft.mybudget.model.ShoppingList;
-import com.comoressoft.mybudget.model.SubCategory;
+import com.comoressoft.mybudget.entity.Category;
+import com.comoressoft.mybudget.entity.Item;
+import com.comoressoft.mybudget.entity.ItemShoppingList;
+import com.comoressoft.mybudget.entity.ShoppingList;
+import com.comoressoft.mybudget.entity.SubCategory;
+import com.comoressoft.mybudget.mapper.GlobalMapper;
 import com.comoressoft.mybudget.repository.CategoryRepository;
 import com.comoressoft.mybudget.repository.ItemRepository;
 import com.comoressoft.mybudget.repository.ItemShoppingListRepository;
@@ -50,12 +52,8 @@ public class BudgetServiceImpl {
 	@Autowired
 	private ItemShoppingListRepository itemShoppingListRepository;
 
-//	summaryList.sort(new Comparator<Summary>() {
-//        @Override
-//        public int compare(Summary o1, Summary o2) {
-//            return (Integer.compare(o1.getMonthPosition(), o2.getMonthPosition()));
-//        }
-//    });
+	GlobalMapper categoryMapper = Mappers.getMapper(GlobalMapper.class);
+
 	public List<CategoryDTO> getCategories(Integer month) {
 		List<CategoryDTO> categories = new ArrayList<>();
 
@@ -172,7 +170,7 @@ public class BudgetServiceImpl {
 	private void categoryToCategoryDTO(List<Category> listCat, List<CategoryDTO> categories) {
 
 		for (Category cat : listCat) {
-			categories.add(catToDto(cat));
+			categories.add(categoryMapper.categoryToCategoryDTO(cat));
 		}
 
 	}

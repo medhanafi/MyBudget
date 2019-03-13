@@ -19,7 +19,7 @@ import com.comoressoft.mybudget.dto.ItemDTO;
 import com.comoressoft.mybudget.dto.ItemShoppingListDTO;
 import com.comoressoft.mybudget.dto.ShoppingListDTO;
 import com.comoressoft.mybudget.dto.SubCategoryDTO;
-import com.comoressoft.mybudget.model.ShoppingList;
+import com.comoressoft.mybudget.entity.ShoppingList;
 import com.comoressoft.mybudget.service.BudgetServiceImpl;
 
 @RestController

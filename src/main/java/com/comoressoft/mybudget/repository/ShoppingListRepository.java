@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.comoressoft.mybudget.model.ShoppingList;
+import com.comoressoft.mybudget.entity.ShoppingList;
 
 public interface ShoppingListRepository extends JpaRepository<ShoppingList, Long> {
 

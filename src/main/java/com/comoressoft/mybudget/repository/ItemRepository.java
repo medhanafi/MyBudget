@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.comoressoft.mybudget.model.Item;
-import com.comoressoft.mybudget.model.SubCategory;
+import com.comoressoft.mybudget.entity.Item;
+import com.comoressoft.mybudget.entity.SubCategory;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
