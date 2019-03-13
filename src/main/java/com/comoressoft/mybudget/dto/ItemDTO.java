@@ -9,8 +9,8 @@ public class ItemDTO {
 	private BigDecimal expectedAmount;
 	private int expectedQuantity;
 	private LocalDate dateItem;
-	private SubCategoryDTO subCategorie;
 	private String itemStatus;
+	private SubCategoryDTO subCategory;
 
 	public Long getItemId() {
 		return itemId;
@@ -53,11 +53,11 @@ public class ItemDTO {
 	}
 
 	public SubCategoryDTO getSubCategorie() {
-		return subCategorie;
+		return subCategory;
 	}
 
 	public void setSubCategorie(SubCategoryDTO subCategorie) {
-		this.subCategorie = subCategorie;
+		this.subCategory = subCategorie;
 	}
 
 	public String getItemStatus() {
