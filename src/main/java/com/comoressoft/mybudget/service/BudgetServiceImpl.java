@@ -52,7 +52,7 @@ public class BudgetServiceImpl {
 	@Autowired
 	private ItemShoppingListRepository itemShoppingListRepository;
 
-	GlobalMapper categoryMapper = Mappers.getMapper(GlobalMapper.class);
+	GlobalMapper mapper = Mappers.getMapper(GlobalMapper.class);
 
 	public List<CategoryDTO> getCategories(Integer month) {
 		List<CategoryDTO> categories = new ArrayList<>();
@@ -170,19 +170,9 @@ public class BudgetServiceImpl {
 	private void categoryToCategoryDTO(List<Category> listCat, List<CategoryDTO> categories) {
 
 		for (Category cat : listCat) {
-			categories.add(categoryMapper.categoryToCategoryDTO(cat));
+			categories.add(mapper.categoryToCategoryDTO(cat));
 		}
 
-	}
-
-	private CategoryDTO catToDto(Category cat) {
-		CategoryDTO catDto = new CategoryDTO();
-		catDto.setCatId(cat.getId());
-		catDto.setCatLabel(cat.getCategoryLabel());
-		catDto.setCatState(cat.getCategoryState());
-
-		this.pareparCatDto(cat, catDto);
-		return catDto;
 	}
 
 	private BigDecimal calculatTotalCostByMonth(List<Item> items, int month) {
@@ -367,33 +357,6 @@ public class BudgetServiceImpl {
 		return categories;
 	}
 
-	private void pareparCatDto(Category cat, CategoryDTO catDto) {
-		List<SubCategoryDTO> subCategories = new LinkedList<>();
-		BigDecimal catTotalCost = new BigDecimal(0);
-		for (SubCategory scat : cat.getSubCategory()) {
-			SubCategoryDTO subCatDto = subCatToDto(scat);
-			subCategories.add(subCatDto);
-			catTotalCost = catTotalCost.add(subCatDto.getSubCatTotalCost());
-		}
-		catDto.setCatTotalCost(catTotalCost);
-		catDto.setSubCategories(subCategories);
-
-	}
-
-	private SubCategoryDTO subCatToDto(SubCategory scat) {
-		SubCategoryDTO subCatDto = new SubCategoryDTO();
-		subCatDto = new SubCategoryDTO();
-		subCatDto.setSubCatId(scat.getId());
-		subCatDto.setSubCatLabel(scat.getSubCategoryLabel());
-		subCatDto.setSubCatState(scat.getSubCategoryState());
-
-		BigDecimal subCatTotalCost = new BigDecimal(0);
-		subCatTotalCost = subCatTotalCost.add(calculatSubCatTotalCost(scat));
-		subCatDto.setSubCatTotalCost(subCatTotalCost);
-
-		return subCatDto;
-	}
-
 	private void parepare(int month, Category cat, CategoryDTO catDto, SubCategoryDTO subCatDto) {
 		List<SubCategoryDTO> subCategories = new LinkedList<>();
 		BigDecimal catTotalCost = new BigDecimal(0);
@@ -443,54 +406,10 @@ public class BudgetServiceImpl {
 		List<ItemDTO> itemsDto = new ArrayList<>();
 		for (Item item : items) {
 			if (!item.getSubCategory().getCategory().getCategoryLabel().equals("Revenus")) {
-				itemsDto.add(itemToitemDto(item));
+				itemsDto.add(mapper.itemToItemDTO(item));
 			}
 		}
 		return itemsDto;
-	}
-
-	private ItemDTO itemToitemDto(Item item) {
-		ItemDTO itemDto = new ItemDTO();
-		if (item != null) {
-			itemDto.setItemId(item.getId());
-			itemDto.setItemLabelle(item.getItemLabelle());
-			itemDto.setExpectedAmount(item.getExpectedAmount());
-			itemDto.setExpectedQuantity(item.getExpectedQuantity());
-			itemDto.setSubCategorie(subCatToDto(item.getSubCategory()));
-			itemDto.setItemStatus(item.getItemStatus());
-			itemDto.setDateItem(item.getDateItem());
-		}
-		return itemDto;
-	}
-
-	private Item itemDtoToItem(ItemDTO itemDto) {
-		Item item = new Item();
-		if (item != null) {
-			item.setId(itemDto.getItemId());
-			item.setItemLabelle(itemDto.getItemLabelle());
-			item.setExpectedAmount(itemDto.getExpectedAmount());
-			item.setExpectedQuantity(itemDto.getExpectedQuantity());
-			item.setSubCategory(subCatDtoToSubCat(itemDto.getSubCategorie()));
-			item.setItemStatus(itemDto.getItemStatus());
-			item.setDateItem(itemDto.getDateItem());
-		}
-		return item;
-	}
-
-	private SubCategory subCatDtoToSubCat(SubCategoryDTO subCateDto) {
-		SubCategory subCat = new SubCategory();
-		if (subCateDto != null) {
-			subCat.setId(subCateDto.getSubCatId());
-			subCat.setSubCategoryLabel(subCateDto.getSubCatLabel());
-			subCat.setSubCategoryState(subCateDto.getSubCatState());
-			subCat.setSubCategoryTotalCost(subCateDto.getSubCatTotalCost());
-			subCat.setItem(this.getItemsBySubCat(subCateDto.getSubCatId()));
-		}
-		return subCat;
-	}
-
-	private List<Item> getItemsBySubCat(Long subCatId) {
-		return itemRepository.findBySubCategory(new SubCategory(subCatId));
 	}
 
 	public List<ItemDTO> getItemsBySubCat(Long subCategorie, Integer month) {
@@ -499,8 +418,8 @@ public class BudgetServiceImpl {
 	}
 
 	public ItemDTO addItem(ItemDTO itemDto) {
-		Item item = this.addItem(itemDtoToItem(itemDto));
-		return itemToitemDto(item);
+		Item item = this.addItem(mapper.itemDTOToItem(itemDto));
+		return mapper.itemToItemDTO(item);
 	}
 
 	public ItemShoppingListDTO addItemToShoppingList(Long itemId, Long idSHL) {
@@ -520,20 +439,21 @@ public class BudgetServiceImpl {
 				Item it = iShopList.getItem();
 				it.setItemStatus(shl.getShoppingListName());
 				this.itemRepository.save(it);
-				dto = itemShopToDto(iShopList);
+				dto = mapper.itemShoppingListToITemShoppingListDTO(iShopList);
 			}
 
 		} else {
 			ISHL.setActualQuantity(ISHL.getActualQuantity() + 1);
 			ISHL = this.itemShoppingListRepository.save(ISHL);
-			dto = itemShopToDto(ISHL);
+			dto = mapper.itemShoppingListToITemShoppingListDTO(ISHL);
 		}
 
 		return dto;
 	}
 
 	public ItemShoppingListDTO updateItemShoppingList(ItemShoppingListDTO ishlToupdate) {
-		return itemShopToDto(this.itemShoppingListRepository.save(ishlToDtoToItemShoppingList(ishlToupdate)));
+		return mapper.itemShoppingListToITemShoppingListDTO(
+				this.itemShoppingListRepository.save(mapper.itemShoppingListDTOToITemShoppingList(ishlToupdate)));
 	}
 
 	@SuppressWarnings("unused")
@@ -557,40 +477,11 @@ public class BudgetServiceImpl {
 
 	}
 
-	private ItemShoppingListDTO itemShopToDto(ItemShoppingList ishopResult) {
-		ItemShoppingListDTO itemDto = new ItemShoppingListDTO();
-		itemDto.setId(ishopResult.getId());
-		itemDto.setActualAmount(ishopResult.getActualAmount());
-		itemDto.setActualQuantity(ishopResult.getActualQuantity());
-		itemDto.setPurchasedDate(ishopResult.getPurchasedDate());
-		itemDto.setItem(itemToitemDto(ishopResult.getItem()));
-		itemDto.setShoppingList(shoppingListToDto(ishopResult.getShoppingList()));
-		return itemDto;
-	}
-
-	private ShoppingListDTO shoppingListToDto(ShoppingList shoppingList) {
-		ShoppingListDTO shopDto = new ShoppingListDTO();
-		shopDto.setId(shoppingList.getId());
-		shopDto.setAllocatedAmount(shoppingList.getAllocatedAmount());
-		shopDto.setDateCreated(shoppingList.getDateCreated());
-		shopDto.setShoppingListName(shoppingList.getShoppingListName());
-		return shopDto;
-	}
-
-	private ShoppingList shoppingListDtoToSh(ShoppingListDTO shoppingList) {
-		ShoppingList shop = new ShoppingList();
-		shop.setId(shoppingList.getId());
-		shop.setAllocatedAmount(shoppingList.getAllocatedAmount());
-		shop.setDateCreated(shoppingList.getDateCreated());
-		shop.setShoppingListName(shoppingList.getShoppingListName());
-		return shop;
-	}
-
 	public List<ShoppingListDTO> getShoppingLists(Integer month) {
 		List<ShoppingList> lists = shoppingListRepository.findByCurrentDate(month);
 		List<ShoppingListDTO> listDto = new ArrayList<>();
 		for (ShoppingList shl : lists) {
-			listDto.add(shoppingListToDto(shl));
+			listDto.add(mapper.shoppingListToShoppingListDTO(shl));
 		}
 		return listDto;
 	}
@@ -598,38 +489,16 @@ public class BudgetServiceImpl {
 	public ShoppingListDTO addShoppingLists(ShoppingList shl) {
 		shl.setDateCreated(LocalDate.now());
 		ShoppingList shlist = shoppingListRepository.save(shl);
-		return shoppingListToDto(shlist);
+		return mapper.shoppingListToShoppingListDTO(shlist);
 	}
 
 	public List<ItemShoppingListDTO> getItemShoppingList(Long idSHL) {
 		List<ItemShoppingList> lists = itemShoppingListRepository.findByShoppingList(new ShoppingList(idSHL));
 		List<ItemShoppingListDTO> listDto = new ArrayList<>();
 		for (ItemShoppingList shl : lists) {
-			listDto.add(itemShoppingListToDto(shl));
+			listDto.add(mapper.itemShoppingListToITemShoppingListDTO(shl));
 		}
 		return listDto;
-	}
-
-	private ItemShoppingListDTO itemShoppingListToDto(ItemShoppingList shl) {
-		ItemShoppingListDTO iShlDto = new ItemShoppingListDTO();
-		iShlDto.setId(shl.getId());
-		iShlDto.setActualAmount(shl.getActualAmount());
-		iShlDto.setActualQuantity(shl.getActualQuantity());
-		iShlDto.setPurchasedDate(shl.getPurchasedDate());
-		iShlDto.setItem(itemToitemDto(shl.getItem()));
-		iShlDto.setShoppingList(shoppingListToDto(shl.getShoppingList()));
-		return iShlDto;
-	}
-
-	private ItemShoppingList ishlToDtoToItemShoppingList(ItemShoppingListDTO shl) {
-		ItemShoppingList iShl = new ItemShoppingList();
-		iShl.setId(shl.getId());
-		iShl.setActualAmount(shl.getActualAmount());
-		iShl.setActualQuantity(shl.getActualQuantity());
-		iShl.setPurchasedDate(shl.getPurchasedDate());
-		iShl.setItem(itemDtoToItem(shl.getItem()));
-		iShl.setShoppingList(shoppingListDtoToSh(shl.getShoppingList()));
-		return iShl;
 	}
 
 }

@@ -52,12 +52,12 @@ public class ItemDTO {
 		this.dateItem = dateItem;
 	}
 
-	public SubCategoryDTO getSubCategorie() {
+	public SubCategoryDTO getSubCategory() {
 		return subCategory;
 	}
 
-	public void setSubCategorie(SubCategoryDTO subCategorie) {
-		this.subCategory = subCategorie;
+	public void setSubCategory(SubCategoryDTO subCategory) {
+		this.subCategory = subCategory;
 	}
 
 	public String getItemStatus() {

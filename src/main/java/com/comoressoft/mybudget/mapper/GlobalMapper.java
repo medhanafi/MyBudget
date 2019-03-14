@@ -5,8 +5,14 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 import com.comoressoft.mybudget.dto.CategoryDTO;
+import com.comoressoft.mybudget.dto.ItemDTO;
+import com.comoressoft.mybudget.dto.ItemShoppingListDTO;
+import com.comoressoft.mybudget.dto.ShoppingListDTO;
 import com.comoressoft.mybudget.dto.SubCategoryDTO;
 import com.comoressoft.mybudget.entity.Category;
+import com.comoressoft.mybudget.entity.Item;
+import com.comoressoft.mybudget.entity.ItemShoppingList;
+import com.comoressoft.mybudget.entity.ShoppingList;
 import com.comoressoft.mybudget.entity.SubCategory;
 
 @Mapper(componentModel = "spring")
@@ -54,5 +60,19 @@ public interface GlobalMapper {
 			@Mapping(target = "subCategoryState", source = "subCatState"),
 			@Mapping(target = "subCategoryTotalCost", source = "subCatTotalCost") })
 	SubCategory subCategoryDTOToSubCategory(SubCategoryDTO subCategoryDTO);
+
+	@Mappings({ @Mapping(target = "itemId", source = "id") })
+	ItemDTO itemToItemDTO(Item item);
+
+	@Mappings({ @Mapping(target = "id", source = "itemId") })
+	Item itemDTOToItem(ItemDTO itemDTO);
+
+	ShoppingListDTO shoppingListToShoppingListDTO(ShoppingList shoppingList);
+
+	ShoppingList shoppingListDTOToShoppingList(ShoppingListDTO shoppingListDTO);
+
+	ItemShoppingListDTO itemShoppingListToITemShoppingListDTO(ItemShoppingList itemShoppingList);
+
+	ItemShoppingList itemShoppingListDTOToITemShoppingList(ItemShoppingListDTO itemShoppingListDTO);
 
 }
