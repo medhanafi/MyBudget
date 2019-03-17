@@ -71,12 +71,21 @@ public class BudgetServiceImpl {
 		return itemRepository.save(item);
 	}
 
-	public void addCategory(Category cat) {
-		categoryRepository.save(cat);
+	public CategoryDTO addCategory(CategoryDTO categoryDto) {
+		return mapper.categoryToCategoryDTO(categoryRepository.save(mapper.categoryDTOToCategory(categoryDto)));
 	}
 
-	public void addSubCategory(SubCategory subCat) {
-		subCategoryRepository.save(subCat);
+	public SubCategoryDTO addSubCategory(SubCategoryDTO subCategoryDto) {
+		return mapper.subCategoryToSubCategoryDTO(
+				subCategoryRepository.save(mapper.subCategoryDTOToSubCategory(subCategoryDto)));
+	}
+
+	public void deleteCategory(Long catId) {
+		categoryRepository.deleteById(catId);
+	}
+
+	public void deleteSubCategory(Long subCatId) {
+		subCategoryRepository.deleteById(subCatId);
 	}
 
 	public List<Item> addManyItem(List<Item> itemsToSave) {
@@ -199,16 +208,16 @@ public class BudgetServiceImpl {
 		return sum;
 	}
 
-//	private BigDecimal calculatItemsTotalCost(int month) {
-//		List<Item> items = getItemsByMonth(month);
-//		BigDecimal sum = new BigDecimal(0);
-//		for (Item item : items) {
-//			BigDecimal param = getAsDecimal(String.valueOf(item.getExpectedQuantity()))
-//					.multiply(item.getExpectedAmount());
-//			sum = sum.add(param);
-//		}
-//		return sum;
-//	}
+	// private BigDecimal calculatItemsTotalCost(int month) {
+	// List<Item> items = getItemsByMonth(month);
+	// BigDecimal sum = new BigDecimal(0);
+	// for (Item item : items) {
+	// BigDecimal param = getAsDecimal(String.valueOf(item.getExpectedQuantity()))
+	// .multiply(item.getExpectedAmount());
+	// sum = sum.add(param);
+	// }
+	// return sum;
+	// }
 
 	private Pair<BigDecimal, BigDecimal> calculatTotalCost(int month, String revLabel) {
 		BigDecimal sumRev = new BigDecimal(0);

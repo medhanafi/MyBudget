@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,7 +60,38 @@ public class BudgetController {
 		List<SubCategoryDTO> result = this.budgetService.getSubCategoryByCategory(catId, month);
 		return this.getResponseWithStatus(result);
 	}
+	@PostMapping(value = "/addcategory")
+	ResponseEntity<?> addCategory(@RequestBody CategoryDTO categoryDto) throws ServiceException {
 
+		CategoryDTO result = this.budgetService.addCategory(categoryDto);
+		return this.getResponseWithStatus(result);
+	}
+	
+	@PostMapping(value = "/addsubcategory")
+	ResponseEntity<?> addSubCategory(@RequestBody SubCategoryDTO subCategoryDto) throws ServiceException {
+
+		SubCategoryDTO result = this.budgetService.addSubCategory(subCategoryDto);
+		return this.getResponseWithStatus(result);
+	}
+	
+	
+	@PutMapping(value = "/deletecategory")
+	ResponseEntity<?> delCategory(@RequestParam Long catId) throws ServiceException {
+
+		this.budgetService.deleteCategory(catId);
+		return new ResponseEntity<String>("{\r\n" + 
+				"        \"error\":0,\r\n" +
+				"    }", HttpStatus.OK);
+	}
+	@PutMapping(value = "/deletesubcategory")
+	ResponseEntity<?> delSubCategory(@RequestParam Long subCatId) throws ServiceException {
+
+		this.budgetService.deleteSubCategory(subCatId);
+		return new ResponseEntity<String>("{\r\n" + 
+				"        \"error\":0,\r\n" +
+				"    }", HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/additem")
 	ResponseEntity<?> addItem(@RequestBody ItemDTO itemDto) throws ServiceException {
 
