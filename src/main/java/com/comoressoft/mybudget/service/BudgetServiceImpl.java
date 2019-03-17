@@ -72,12 +72,16 @@ public class BudgetServiceImpl {
 	}
 
 	public CategoryDTO addCategory(CategoryDTO categoryDto) {
-		return mapper.categoryToCategoryDTO(categoryRepository.save(mapper.categoryDTOToCategory(categoryDto)));
+		Category cat=this.categoryRepository.findById(categoryDto.getCatId()).get();
+		cat.setCategoryLabel(categoryDto.getCatLabel());
+		return mapper.categoryToCategoryDTO(categoryRepository.save(cat));
 	}
 
 	public SubCategoryDTO addSubCategory(SubCategoryDTO subCategoryDto) {
+		SubCategory scat=this.subCategoryRepository.findById(subCategoryDto.getSubCatId()).get();
+		scat.setSubCategoryLabel(subCategoryDto.getSubCatLabel());
 		return mapper.subCategoryToSubCategoryDTO(
-				subCategoryRepository.save(mapper.subCategoryDTOToSubCategory(subCategoryDto)));
+				subCategoryRepository.save(scat));
 	}
 
 	public void deleteCategory(Long catId) {

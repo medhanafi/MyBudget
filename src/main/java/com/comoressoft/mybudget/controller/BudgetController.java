@@ -76,7 +76,7 @@ public class BudgetController {
 	
 	
 	@PutMapping(value = "/deletecategory")
-	ResponseEntity<?> delCategory(@RequestParam Long catId) throws ServiceException {
+	ResponseEntity<?> delCategory(@RequestParam(value = "cat_id") Long catId) throws ServiceException {
 
 		this.budgetService.deleteCategory(catId);
 		return new ResponseEntity<String>("{\r\n" + 
@@ -84,7 +84,7 @@ public class BudgetController {
 				"    }", HttpStatus.OK);
 	}
 	@PutMapping(value = "/deletesubcategory")
-	ResponseEntity<?> delSubCategory(@RequestParam Long subCatId) throws ServiceException {
+	ResponseEntity<?> delSubCategory(@RequestParam(value = "sub_cat_id") Long subCatId) throws ServiceException {
 
 		this.budgetService.deleteSubCategory(subCatId);
 		return new ResponseEntity<String>("{\r\n" + 
