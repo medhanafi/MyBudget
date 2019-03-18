@@ -91,6 +91,10 @@ public class BudgetServiceImpl {
 	public void deleteSubCategory(Long subCatId) {
 		subCategoryRepository.deleteById(subCatId);
 	}
+	
+	public void deleteItem(Long itemId) {
+		itemRepository.deleteById(itemId);
+	}
 
 	public List<Item> addManyItem(List<Item> itemsToSave) {
 		return new LinkedList<>(itemRepository.saveAll(itemsToSave));

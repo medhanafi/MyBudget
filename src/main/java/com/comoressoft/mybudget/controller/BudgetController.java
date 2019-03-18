@@ -92,6 +92,15 @@ public class BudgetController {
 				"    }", HttpStatus.OK);
 	}
 	
+	@PutMapping(value = "/deleteitem")
+	ResponseEntity<?> delItem(@RequestParam(value = "item_id") Long itemId) throws ServiceException {
+
+		this.budgetService.deleteItem(itemId);
+		return new ResponseEntity<String>("{\r\n" + 
+				"        \"error\":0,\r\n" +
+				"    }", HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/additem")
 	ResponseEntity<?> addItem(@RequestBody ItemDTO itemDto) throws ServiceException {
 
