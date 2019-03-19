@@ -38,7 +38,7 @@ public class SubCategory {
 	@ManyToOne
 	private Category category;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "subCategory", orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "subCategory")
 	private List<Item> item = new ArrayList<>();
 
 	public SubCategory(Long subCategorie) {

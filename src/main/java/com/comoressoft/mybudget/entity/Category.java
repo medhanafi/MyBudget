@@ -2,9 +2,7 @@ package com.comoressoft.mybudget.entity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,7 +35,7 @@ public class Category {
 	@Type(type = "big_decimal")
 	private BigDecimal categoryTotalCost;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "category")
 	private List<SubCategory> subCategory = new ArrayList<>();
 
 	public Long getId() {
@@ -64,7 +62,6 @@ public class Category {
 		this.categoryState = categoryState;
 	}
 
-	
 	public BigDecimal getCategoryTotalCost() {
 		return categoryTotalCost;
 	}

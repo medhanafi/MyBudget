@@ -58,7 +58,7 @@ public class Item {
 	// @ForeignKey(name = "FK_unit_item")))
 	// private Set<ShoppingList> shoppingList = new HashSet<>();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item", orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
 	private Set<ItemShoppingList> itemShoppingList = new HashSet<>();
 
 	public Long getId() {

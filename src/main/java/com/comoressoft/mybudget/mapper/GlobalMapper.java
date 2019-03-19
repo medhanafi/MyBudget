@@ -44,10 +44,10 @@ public interface GlobalMapper {
 	 * @param subCategory
 	 * @return subCategoryDTO
 	 */
-	@Mappings({ @Mapping(target = "subCatId", source = "id"),
-			@Mapping(target = "subCatLabel", source = "subCategoryLabel"),
-			@Mapping(target = "subCatState", source = "subCategoryState"),
-			@Mapping(target = "subCatTotalCost", source = "subCategoryTotalCost") })
+	@Mapping(target = "subCatId", source = "id")
+	@Mapping(target = "subCatLabel", source = "subCategoryLabel")
+	@Mapping(target = "subCatState", source = "subCategoryState")
+	@Mapping(target = "subCatTotalCost", source = "subCategoryTotalCost")
 	SubCategoryDTO subCategoryToSubCategoryDTO(SubCategory subCategory);
 
 	/**
@@ -61,10 +61,10 @@ public interface GlobalMapper {
 			@Mapping(target = "subCategoryTotalCost", source = "subCatTotalCost") })
 	SubCategory subCategoryDTOToSubCategory(SubCategoryDTO subCategoryDTO);
 
-	@Mappings({ @Mapping(target = "itemId", source = "id") })
+	@Mapping(target = "itemId", source = "id")
 	ItemDTO itemToItemDTO(Item item);
 
-	@Mappings({ @Mapping(target = "id", source = "itemId") })
+	@Mapping(target = "id", source = "itemId")
 	Item itemDTOToItem(ItemDTO itemDTO);
 
 	ShoppingListDTO shoppingListToShoppingListDTO(ShoppingList shoppingList);

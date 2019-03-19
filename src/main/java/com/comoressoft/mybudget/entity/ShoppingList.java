@@ -26,9 +26,9 @@ public class ShoppingList {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column( length = 130)
+	@Column(length = 130)
 	private String shoppingListName;
-	
+
 	@Column(nullable = false)
 	private LocalDate dateCreated;
 
@@ -40,11 +40,11 @@ public class ShoppingList {
 	// @JsonIgnore
 	// private List<Item> items = new ArrayList<>();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingList", orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingList")
 	private Set<ItemShoppingList> itemShoppingList = new HashSet<>();
 
 	public ShoppingList(Long idSHL) {
-		this.id=idSHL;
+		this.id = idSHL;
 	}
 
 	public ShoppingList() {
@@ -58,7 +58,6 @@ public class ShoppingList {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 	public String getShoppingListName() {
 		return shoppingListName;

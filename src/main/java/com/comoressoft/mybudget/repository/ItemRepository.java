@@ -3,7 +3,10 @@ package com.comoressoft.mybudget.repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -26,5 +29,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 	List<Item> findByMonthAndSubCat(@Param("monthValue") int month, @Param("subCat") Long subCategorie);
 
 	List<Item> findBySubCategory(SubCategory subCategory);
+
+	@Modifying
+	@Query("DELETE FROM #{#entityName} where id=:itemId")
+	void deleteItemById(@Param("itemId") Long itemId);
 
 }

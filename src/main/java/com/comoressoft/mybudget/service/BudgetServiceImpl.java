@@ -15,9 +15,13 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.mapstruct.factory.Mappers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.comoressoft.mybudget.dto.CategoryDTO;
 import com.comoressoft.mybudget.dto.ItemDTO;
@@ -40,6 +44,8 @@ import com.comoressoft.mybudget.repository.SubCategoryRepository;
 
 @Service
 public class BudgetServiceImpl {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BudgetServiceImpl.class);
 	@Autowired
 	private CategoryRepository categoryRepository;
 	@Autowired
@@ -72,26 +78,32 @@ public class BudgetServiceImpl {
 	}
 
 	public CategoryDTO addCategory(CategoryDTO categoryDto) {
-		Category cat=this.categoryRepository.findById(categoryDto.getCatId()).get();
+		Category cat = this.categoryRepository.findById(categoryDto.getCatId()).get();
 		cat.setCategoryLabel(categoryDto.getCatLabel());
 		return mapper.categoryToCategoryDTO(categoryRepository.save(cat));
 	}
 
 	public SubCategoryDTO addSubCategory(SubCategoryDTO subCategoryDto) {
-		SubCategory scat=this.subCategoryRepository.findById(subCategoryDto.getSubCatId()).get();
+		SubCategory scat = this.subCategoryRepository.findById(subCategoryDto.getSubCatId()).get();
 		scat.setSubCategoryLabel(subCategoryDto.getSubCatLabel());
-		return mapper.subCategoryToSubCategoryDTO(
-				subCategoryRepository.save(scat));
+		return mapper.subCategoryToSubCategoryDTO(subCategoryRepository.save(scat));
 	}
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void deleteCategory(Long catId) {
 		categoryRepository.deleteById(catId);
 	}
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void deleteSubCategory(Long subCatId) {
+		SubCategory sub = subCategoryRepository.findById(subCatId).get();
+		Category cat = categoryRepository.findById(sub.getCategory().getId()).get();
+		cat.getSubCategory().remove(sub);
+		LOGGER.debug(sub.getSubCategoryLabel()+" "+cat.getCategoryLabel());
 		subCategoryRepository.deleteById(subCatId);
 	}
-	
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void deleteItem(Long itemId) {
 		itemRepository.deleteById(itemId);
 	}
@@ -435,7 +447,22 @@ public class BudgetServiceImpl {
 	}
 
 	public ItemDTO addItem(ItemDTO itemDto) {
-		Item item = this.addItem(mapper.itemDTOToItem(itemDto));
+		Item item = mapper.itemDTOToItem(itemDto);
+
+//		if (item.getId() != null) {
+//			Optional<Item> optItemOld = itemRepository.findById(item.getId());
+//
+//			if (optItemOld.isPresent()) {
+//				Item itemOld = optItemOld.get();
+//				BigDecimal amount = itemOld.getExpectedAmount().subtract(item.getExpectedAmount());
+//
+//				// repo add amount
+//
+//			}
+//		}
+
+		this.addItem(item);
+
 		return mapper.itemToItemDTO(item);
 	}
 
