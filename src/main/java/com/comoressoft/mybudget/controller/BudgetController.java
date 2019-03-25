@@ -44,6 +44,13 @@ public class BudgetController {
 		List<ItemDTO> result = this.budgetService.getItems(month);
 		return this.getResponseWithStatus(result);
 	}
+	
+	@GetMapping(value = "/preloaditems")
+	ResponseEntity<?> preloaditems(@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
+
+		List<ItemDTO> result = this.budgetService.preloadItems(month);
+		return this.getResponseWithStatus(result);
+	}
 
 	@GetMapping(value = "/itemsBySubcat")
 	ResponseEntity<?> getitemsBySubCat(@RequestParam(value = "subcat_id", required = false) Long subcatId,

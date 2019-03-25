@@ -42,63 +42,124 @@ GRANT ALL ON TABLESPACE tbs_my_budget TO my_budget;
 ALTER DATABASE my_budget SET constraint_exclusion=on;
 
 
+--TABLES
+CREATE TABLE category (
+	id int8 NOT NULL,
+	category_label varchar(64) NOT NULL,
+	category_state varchar(25) NULL,
+	category_total_cost numeric(10,2) NULL,
+	CONSTRAINT category_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE sub_category (
+	id int8 NOT NULL,
+	sub_category_label varchar(64) NOT NULL,
+	sub_category_state varchar(25) NULL,
+	sub_category_total_cost numeric(10,2) NOT NULL,
+	category int8 NULL,
+	CONSTRAINT sub_category_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_category_ FOREIGN KEY (category) REFERENCES category(id)
+);
+
+CREATE TABLE item (
+	id int8 NOT NULL,
+	date_item date NOT NULL,
+	expected_amount numeric(8,2) NOT NULL,
+	expected_quantity int4 NOT NULL,
+	item_labelle varchar(128) NOT NULL,
+	sub_category int8 NULL,
+	item_status varchar(25) NULL,
+	CONSTRAINT item_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_sub_category_ FOREIGN KEY (sub_category) REFERENCES sub_category(id)
+);
+
+CREATE TABLE item_shopping_list (
+	id int8 NOT NULL,
+	actual_amount numeric(10,2) NULL,
+	actual_quantity int4 NULL,
+	purchased_date date NULL,
+	item int8 NOT NULL,
+	shopping_list int8 NOT NULL,
+	CONSTRAINT item_shopping_list_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_item_ FOREIGN KEY (item) REFERENCES item(id),
+	CONSTRAINT fk_shooping_list_ FOREIGN KEY (shopping_list) REFERENCES shopping_list(id)
+);
+
+
+CREATE TABLE shopping_list (
+	id int8 NOT NULL,
+	allocated_amount numeric(10,2) NOT NULL,
+	date_created date NOT NULL,
+	shopping_list_name varchar(130) NULL,
+	CONSTRAINT shopping_list_pkey PRIMARY KEY (id)
+);
 
 
 
--- DROP SEQUENCE public.seq_category;
+-- DROP SEQUENCE seq_category;
 
-CREATE SEQUENCE public.seq_category
+CREATE SEQUENCE seq_category
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807
 	START 1;
 
--- DROP SEQUENCE public.seq_item;
+-- DROP SEQUENCE seq_item;
 
-CREATE SEQUENCE public.seq_item
+CREATE SEQUENCE seq_item
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807;
 
--- DROP SEQUENCE public.seq_item_shopping_list;
+-- DROP SEQUENCE seq_item_shopping_list;
 
-CREATE SEQUENCE public.seq_item_shopping_list
+CREATE SEQUENCE seq_item_shopping_list
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807;
 
--- DROP SEQUENCE public.seq_shopping_list;
+-- DROP SEQUENCE seq_shopping_list;
 
-CREATE SEQUENCE public.seq_shopping_list
+CREATE SEQUENCE seq_shopping_list
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807;
 
--- DROP SEQUENCE public.seq_sub_category;
+-- DROP SEQUENCE seq_sub_category;
 
-CREATE SEQUENCE public.seq_sub_category
+CREATE SEQUENCE seq_sub_category
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807;
 
-	
-	
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(1, 'Revenus', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(3, 'Foyer', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(4, 'Vie quotidienne', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(5, 'Enfants', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(6, 'Transport	', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(7, 'Santé', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(8, 'Assurance', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(9, 'Enseignement', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(10, 'Charité', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(11, 'Epargne', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(12, 'Loisirs', 'active', 0);
-INSERT INTO category (id, category_label, category_state, category_total_cost) VALUES(13, 'Vacances', 'active', 0);
 
 -- Calculate of subCatotalCost from all items
 
-drop function sub_category_update cascade;
+-- drop function sub_category_update cascade;
+-- DROP TRIGGER IF EXISTS sub_category_update ON item_shopping_list;
+
+-- CREATE FUNCTION sub_category_update() RETURNS trigger AS $sub_category_update$
+--     BEGIN
+-- 		update sub_category set sub_category_total_cost=(
+-- with item_tab as (
+-- 	select id, item_labelle, 
+-- 	case when (select  sum(actual_amount*actual_quantity)  from item_shopping_list where item=i.id) is null then 0 
+-- 	else (select  sum(actual_amount*actual_quantity)  from item_shopping_list where item=i.id) end as actual , sub_category  from item i
+-- 	where item_labelle!='salaire')
+-- select case when sum(actual) is null then 0 else sum(actual) end
+-- from item_tab it where it.sub_category=sub_category.id);
+
+-- return new;
+--     END;
+-- $sub_category_update$ LANGUAGE plpgsql;
+
+
+-- CREATE TRIGGER sub_category_update BEFORE INSERT OR update or delete ON item_shopping_list
+--     EXECUTE PROCEDURE sub_category_update();
+   
+--    
+
+  drop function sub_category_update cascade;
 DROP TRIGGER IF EXISTS sub_category_update ON item;
 
 CREATE FUNCTION sub_category_update() RETURNS trigger AS $sub_category_update$
@@ -114,11 +175,8 @@ $sub_category_update$ LANGUAGE plpgsql;
 
 
 CREATE TRIGGER sub_category_update BEFORE INSERT OR update or delete ON item
-    EXECUTE PROCEDURE sub_category_update();
+    EXECUTE PROCEDURE sub_category_update(); 
    
-
-
-    
     -- Calculate of CatotalCost from all subcat
 
 drop function category_update cascade;
@@ -139,4 +197,3 @@ $category_update$ LANGUAGE plpgsql;
 CREATE TRIGGER category_update BEFORE INSERT OR update or delete ON sub_category
     EXECUTE PROCEDURE category_update();
    
-
