@@ -155,6 +155,15 @@ public class BudgetController {
 			return this.getResponseWithStatus(this.budgetService.getSummary());
 		}
 	}
+	
+	@GetMapping(value = "/preloaditems")
+	ResponseEntity<?> preloaditems(@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
+
+		List<ItemDTO> result = this.budgetService.preloadItems(month);
+		return this.getResponseWithStatus(result);
+	}
+
+	
 
 	private <T> ResponseEntity<?> getResponseWithStatus(T result) {
 		if (result == null) {

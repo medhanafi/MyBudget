@@ -110,11 +110,27 @@ public class BudgetServiceImpl {
 	}
 
 	public List<Item> addManyItem(List<Item> itemsToSave) {
-		return new LinkedList<>(itemRepository.saveAll(itemsToSave));
+		List<Item> items=new LinkedList<>(itemRepository.saveAll(itemsToSave));
+		items.sort(new Comparator<Item>() {
+	        @Override
+	        public int compare(Item o1, Item o2) {
+	        	return (o1.getItemLabelle().compareTo(o2.getItemLabelle()));
+	        }
+	    });
+		return items;
 	}
 
 	public List<Item> getItems() {
-		return new LinkedList<>(itemRepository.findAll());
+		
+		List<Item> items=new LinkedList<>(itemRepository.findAll());
+		
+		items.sort(new Comparator<Item>() {
+	        @Override
+	        public int compare(Item o1, Item o2) {
+	            return (o1.getItemLabelle().compareTo(o2.getItemLabelle()));
+	        }
+	    });
+		return items;
 	}
 
 	public List<SubCategoryDTO> getSubCategoryByCategory(Long catId, Integer month) {
@@ -473,9 +489,11 @@ public class BudgetServiceImpl {
 					item.setSubCategory(i.getSubCategory());
 					itemsAct.add(item);
 				}
+				itemsAct=this.itemRepository.saveAll(itemsAct);
 			}
+		
 		}
-		itemsAct=this.itemRepository.saveAll(itemsAct);
+		
 		itemsDto = itemToItemDto(itemsAct);
 
 		return itemsDto;
@@ -528,6 +546,8 @@ public class BudgetServiceImpl {
 		if (ISHL == null) {
 			iShopList.setItem(item);
 			iShopList.setShoppingList(shl);
+			iShopList.setActualAmount(new BigDecimal(0));
+			iShopList.setActualQuantity(0);
 			iShopList = this.itemShoppingListRepository.save(iShopList);
 			if (iShopList != null) {
 				Item it = iShopList.getItem();
