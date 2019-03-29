@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -216,7 +217,29 @@ public class BudgetServiceImpl {
 		}
 		return sum;
 	}
+	
+	private BigDecimal getActualAmountBySHLItem(SubCategoryDTO scat, int month) {
+		BigDecimal sum = new BigDecimal(0);
 
+		for (Item item : itemRepository.findBySubCategory(mapper.subCategoryDTOToSubCategory(scat))) {
+			if (item.getDateItem().getMonthValue() == month) {
+				sum=sum.add(getActualAmountBySHL(item));
+			}
+		}
+		return sum;
+	}
+	private BigDecimal getActualAmountBySHL(Item item) {
+		List<ItemShoppingList> itemShls =itemShoppingListRepository.findByItem(item);
+			BigDecimal sum = new BigDecimal(0);
+		for(ItemShoppingList ishl:itemShls) {
+			BigDecimal param = getAsDecimal(String.valueOf(ishl.getActualQuantity()))
+					.multiply(ishl.getActualAmount());
+			sum = sum.add(param);
+		}
+		return sum;
+		
+		
+	}
 	private BigDecimal calculatSubCatTotalCost(SubCategory scat) {
 		BigDecimal sum = new BigDecimal(0);
 
@@ -251,7 +274,10 @@ public class BudgetServiceImpl {
 					}
 				} else {
 					if (cat.getCatTotalCost() != null) {
-						sumDep = sumDep.add(cat.getCatTotalCost());
+						for (SubCategoryDTO sCat : cat.getSubCategories()) {
+						BigDecimal st= getActualAmountBySHLItem(sCat, month);
+						sumDep = sumDep.add(st);
+						}
 					}
 				}
 			}
@@ -427,6 +453,30 @@ public class BudgetServiceImpl {
 		}
 
 		itemsDto = itemToItemDto(items);
+
+		return itemsDto;
+	}
+	
+	public List<ItemDTO> preloadItems(Integer month) {
+		List<Item> itemsPrev = new ArrayList<>();
+		List<Item> itemsAct = new ArrayList<>();
+		List<ItemDTO> itemsDto = null;
+		if (month != null && month != 0) {
+			if(this.getItemsByMonth(month).isEmpty()) {
+				itemsPrev = this.getItemsByMonth(month-1);
+				for(Item i:itemsPrev) {
+					Item item=new Item();
+					item.setDateItem(LocalDate.of(Calendar.getInstance().get(Calendar.YEAR), month, Calendar.getInstance().get(Calendar.DAY_OF_MONTH)));
+					item.setExpectedAmount(i.getExpectedAmount());
+					item.setExpectedQuantity(i.getExpectedQuantity());
+					item.setItemLabelle(i.getItemLabelle());
+					item.setSubCategory(i.getSubCategory());
+					itemsAct.add(item);
+				}
+			}
+		}
+		itemsAct=this.itemRepository.saveAll(itemsAct);
+		itemsDto = itemToItemDto(itemsAct);
 
 		return itemsDto;
 	}

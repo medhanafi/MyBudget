@@ -14,4 +14,6 @@ public interface ItemShoppingListRepository extends JpaRepository<ItemShoppingLi
 
 	ItemShoppingList findByShoppingListAndItem(ShoppingList shl, Item item);
 
+	List<ItemShoppingList>  findByItem(Item item);
+
 }
