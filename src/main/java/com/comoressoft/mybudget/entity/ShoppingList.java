@@ -99,4 +99,12 @@ public class ShoppingList {
 		this.itemShoppingList = itemShoppingList;
 	}
 
+	public Family getFamily() {
+		return family;
+	}
+
+	public void setFamily(Family family) {
+		this.family = family;
+	}
+
 }

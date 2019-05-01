@@ -1,5 +1,6 @@
 package com.comoressoft.mybudget.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.service.spi.ServiceException;
@@ -11,17 +12,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.comoressoft.mybudget.dto.CategoryDTO;
+import com.comoressoft.mybudget.dto.FamilyDTO;
 import com.comoressoft.mybudget.dto.ItemDTO;
 import com.comoressoft.mybudget.dto.ItemShoppingListDTO;
 import com.comoressoft.mybudget.dto.ShoppingListDTO;
 import com.comoressoft.mybudget.dto.SubCategoryDTO;
 import com.comoressoft.mybudget.entity.ShoppingList;
 import com.comoressoft.mybudget.service.BudgetServiceImpl;
+import com.comoressoft.mybudget.entity.Family;
 
 @RestController
 @RequestMapping("/api")
@@ -39,17 +43,27 @@ public class BudgetController {
 	}
 
 	@GetMapping(value = "/items")
-	ResponseEntity<?> getitems(@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
-
-		List<ItemDTO> result = this.budgetService.getItems(month);
+	ResponseEntity<?> getitems(@RequestParam(value = "month", required = false) Integer month, @RequestHeader(value="code_family")String codeFamily) throws ServiceException {
+		List<ItemDTO> result=new ArrayList<>();
+		if(codeFamily!=null && !codeFamily.isEmpty()) {
+			 result = this.budgetService.getItems(month, codeFamily);
+		}else {
+		 result = this.budgetService.getItems(month);
+		}
 		return this.getResponseWithStatus(result);
 	}
 
 	@GetMapping(value = "/itemsBySubcat")
 	ResponseEntity<?> getitemsBySubCat(@RequestParam(value = "subcat_id", required = false) Long subcatId,
-			@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
-
-		List<ItemDTO> result = this.budgetService.getItemsBySubCat(subcatId, month);
+			@RequestParam(value = "month", required = false) Integer month,
+			 @RequestHeader(value="code_family")String codeFamily) throws ServiceException {
+		
+		List<ItemDTO> result=new ArrayList<>();
+		if(codeFamily!=null && !codeFamily.isEmpty()) {
+		result = this.budgetService.getItemsBySubCat(subcatId, month, codeFamily);
+		}else{
+			result = this.budgetService.getItemsBySubCat(subcatId, month);
+		}
 		return this.getResponseWithStatus(result);
 	}
 
@@ -107,7 +121,8 @@ public class BudgetController {
 		ItemDTO result = this.budgetService.addItem(itemDto);
 		return this.getResponseWithStatus(result);
 	}
-
+	
+	
 	@PostMapping(value = "/addShoppingList")
 	ResponseEntity<?> createShoppingList(@RequestBody ShoppingList shop) throws ServiceException {
 
@@ -138,10 +153,15 @@ public class BudgetController {
 	}
 
 	@GetMapping(value = "/shoppingLists")
-	ResponseEntity<?> getShoppingLists(@RequestParam(value = "month", required = false) Integer month)
+	ResponseEntity<?> getShoppingLists(@RequestParam(value = "month", required = false) Integer month,
+			@RequestHeader(value="code_family")String codeFamily)
 			throws ServiceException {
-
-		List<ShoppingListDTO> result = this.budgetService.getShoppingLists(month);
+		List<ShoppingListDTO> result =new ArrayList<>();
+		if(codeFamily!=null && !codeFamily.isEmpty()) {
+			result= this.budgetService.getShoppingLists(month, codeFamily);
+		}else {
+		result= this.budgetService.getShoppingLists(month);
+		}
 		return this.getResponseWithStatus(result);
 	}
 
@@ -171,6 +191,22 @@ public class BudgetController {
 		} else {
 			return new ResponseEntity<T>(result, HttpStatus.OK);
 		}
+	}
+
+	
+	@PostMapping(value = "/addfamily")
+	ResponseEntity<?> addFamily(@RequestBody Family family) throws ServiceException {
+
+		FamilyDTO result = this.budgetService.addFamily(family);
+		return this.getResponseWithStatus(result);
+	}
+	
+	@GetMapping(value = "/logfamily")
+	ResponseEntity<?> logFamily(@RequestParam String code, String pwd) throws ServiceException {
+
+		FamilyDTO result = this.budgetService.findFamily(code, pwd);
+		
+		return this.getResponseWithStatus(result);
 	}
 
 }

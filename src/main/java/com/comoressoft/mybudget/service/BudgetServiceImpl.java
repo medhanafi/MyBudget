@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.comoressoft.mybudget.dto.CategoryDTO;
+import com.comoressoft.mybudget.dto.FamilyDTO;
 import com.comoressoft.mybudget.dto.ItemDTO;
 import com.comoressoft.mybudget.dto.ItemShoppingListDTO;
 import com.comoressoft.mybudget.dto.ShoppingListDTO;
@@ -32,12 +34,14 @@ import com.comoressoft.mybudget.dto.SubCategoryDTO;
 import com.comoressoft.mybudget.dto.SummaryDTO;
 import com.comoressoft.mybudget.dto.TotalSummaryDTO;
 import com.comoressoft.mybudget.entity.Category;
+import com.comoressoft.mybudget.entity.Family;
 import com.comoressoft.mybudget.entity.Item;
 import com.comoressoft.mybudget.entity.ItemShoppingList;
 import com.comoressoft.mybudget.entity.ShoppingList;
 import com.comoressoft.mybudget.entity.SubCategory;
 import com.comoressoft.mybudget.mapper.GlobalMapper;
 import com.comoressoft.mybudget.repository.CategoryRepository;
+import com.comoressoft.mybudget.repository.FamilyRepository;
 import com.comoressoft.mybudget.repository.ItemRepository;
 import com.comoressoft.mybudget.repository.ItemShoppingListRepository;
 import com.comoressoft.mybudget.repository.ShoppingListRepository;
@@ -58,6 +62,9 @@ public class BudgetServiceImpl {
 	private ShoppingListRepository shoppingListRepository;
 	@Autowired
 	private ItemShoppingListRepository itemShoppingListRepository;
+	
+	@Autowired
+	private FamilyRepository familyRepository;
 
 	GlobalMapper mapper = Mappers.getMapper(GlobalMapper.class);
 
@@ -338,12 +345,9 @@ public class BudgetServiceImpl {
 	}
 
 	private List<Item> getItemsByMonth(int month) {
-		// LocalDate start = LocalDate.of(Calendar.getInstance().get(Calendar.YEAR),
-		// month, 1);
-		// LocalDate end = LocalDate.of(Calendar.getInstance().get(Calendar.YEAR),
-		// month, start.lengthOfMonth());
 		return itemRepository.findByDateItemLtAndGt(month);
 	}
+	
 
 	public List<Category> getCategoriesEntityByMonth(int month) {
 		List<Item> items = getItemsByMonth(month);
@@ -615,4 +619,55 @@ public class BudgetServiceImpl {
 		return listDto;
 	}
 
+	public List<ItemDTO> getItems(Integer month, String codeFamily) {
+		List<Item> items = new ArrayList<>();
+		List<ItemDTO> itemsDto = null;
+		if (month != null && month != 0) {
+			items = this.getItemsByMonth(month);
+		} else {
+			items = this.getItems();
+		}
+		List<Item> itemsFamily =this.filterItemByFamily(items,codeFamily);
+		itemsDto = itemToItemDto(itemsFamily);
+
+		return itemsDto;
+	}
+
+	public List<ItemDTO> getItemsBySubCat(Long subCategorie, Integer month, String codeFamily) {
+		List<Item> items = itemRepository.findByMonthAndSubCat(month, subCategorie);
+		List<Item> itemsFamily =this.filterItemByFamily(items,codeFamily);
+		return itemToItemDto(itemsFamily);
+	}
+
+	public FamilyDTO addFamily(Family family) {
+		return this.mapper.familyToFamilyDTO(this.familyRepository.save(family));
+		
+	}
+
+	public List<Item> filterItemByFamily(List<Item> listItem, String codeFamily){
+	return	listItem.stream().filter(item -> item.getFamily().getCode().equals(codeFamily))     
+        .collect(Collectors.toList()); 
+	}
+	
+	public List<ShoppingList> filterShoppingListByFamily(List<ShoppingList> listShoppingList, String codeFamily){
+		return	listShoppingList.stream().filter(shl -> shl.getFamily().getCode().equals(codeFamily))     
+	        .collect(Collectors.toList()); 
+		}
+
+	public List<ShoppingListDTO> getShoppingLists(Integer month, String codeFamily) {
+		List<ShoppingList> lists = shoppingListRepository.findByCurrentDate(month);
+		
+		List<ShoppingList> shoppingListFamily =this.filterShoppingListByFamily(lists,codeFamily);
+		
+		List<ShoppingListDTO> listDto = new ArrayList<>();
+		for (ShoppingList shl : shoppingListFamily) {
+			listDto.add(mapper.shoppingListToShoppingListDTO(shl));
+		}
+		return listDto;
+	}
+
+	public FamilyDTO findFamily(String code, String pwd) {
+		Family family=this.familyRepository.findByCodeAndPwd(code,pwd);
+		return this.mapper.familyToFamilyDTO(family);
+	}
 }
