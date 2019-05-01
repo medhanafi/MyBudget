@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -35,6 +36,9 @@ public class ShoppingList {
 	@Column(nullable = false, precision = 10, scale = 2)
 	@Type(type = "big_decimal")
 	private BigDecimal allocatedAmount;
+	
+	@ManyToOne
+	private Family family;
 
 	// @ManyToMany(fetch = FetchType.LAZY, mappedBy = "shoppingList")
 	// @JsonIgnore

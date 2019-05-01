@@ -49,6 +49,9 @@ public class Item {
 
 	@ManyToOne
 	private SubCategory subCategory;
+	
+	@ManyToOne
+	private Family family;
 
 	// @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
 	// CascadeType.MERGE })
