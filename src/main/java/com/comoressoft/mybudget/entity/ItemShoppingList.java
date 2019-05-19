@@ -8,9 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -19,6 +22,8 @@ public class ItemShoppingList {
 
 	@Id
 	@GeneratedValue(generator = "seq_item_shopping_list", strategy = GenerationType.SEQUENCE)
+	@GenericGenerator(name = "seq_item_shopping_list", strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator", parameters = {
+			@Parameter(name = "sequence_name", value = "seq_item_shopping_list"), @Parameter(name = "increment_size", value = "1") })
 	@Column(name = "id", nullable = false)
 	private Long id;
 
@@ -31,9 +36,11 @@ public class ItemShoppingList {
 	private LocalDate purchasedDate;
 
 	@ManyToOne
+	@JoinColumn(name = "item")
 	private Item item;
 
 	@ManyToOne
+	@JoinColumn(name = "shoppingList")
 	private ShoppingList shoppingList;
 
 	public Long getId() {

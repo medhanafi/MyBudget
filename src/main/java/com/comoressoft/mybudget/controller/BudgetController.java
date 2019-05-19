@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +42,7 @@ public class BudgetController {
 	}
 
 	@GetMapping(value = "/items")
-	ResponseEntity<?> getitems(@RequestParam(value = "month", required = false) Integer month, @RequestHeader(value="code_family")String codeFamily) throws ServiceException {
+	ResponseEntity<?> getitems(@RequestParam(value = "month", required = false) Integer month, @RequestParam(value="code_family")String codeFamily) throws ServiceException {
 		List<ItemDTO> result=new ArrayList<>();
 		if(codeFamily!=null && !codeFamily.isEmpty()) {
 			 result = this.budgetService.getItems(month, codeFamily);
@@ -56,7 +55,7 @@ public class BudgetController {
 	@GetMapping(value = "/itemsBySubcat")
 	ResponseEntity<?> getitemsBySubCat(@RequestParam(value = "subcat_id", required = false) Long subcatId,
 			@RequestParam(value = "month", required = false) Integer month,
-			 @RequestHeader(value="code_family")String codeFamily) throws ServiceException {
+			 @RequestParam(value="code_family")String codeFamily) throws ServiceException {
 		
 		List<ItemDTO> result=new ArrayList<>();
 		if(codeFamily!=null && !codeFamily.isEmpty()) {
@@ -154,7 +153,7 @@ public class BudgetController {
 
 	@GetMapping(value = "/shoppingLists")
 	ResponseEntity<?> getShoppingLists(@RequestParam(value = "month", required = false) Integer month,
-			@RequestHeader(value="code_family")String codeFamily)
+			@RequestParam(value="code_family")String codeFamily)
 			throws ServiceException {
 		List<ShoppingListDTO> result =new ArrayList<>();
 		if(codeFamily!=null && !codeFamily.isEmpty()) {

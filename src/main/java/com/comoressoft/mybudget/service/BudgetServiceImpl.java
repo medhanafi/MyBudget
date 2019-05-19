@@ -650,6 +650,7 @@ public class BudgetServiceImpl {
 	}
 	
 	public List<ShoppingList> filterShoppingListByFamily(List<ShoppingList> listShoppingList, String codeFamily){
+		
 		return	listShoppingList.stream().filter(shl -> shl.getFamily().getCode().equals(codeFamily))     
 	        .collect(Collectors.toList()); 
 		}
