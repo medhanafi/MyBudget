@@ -1,5 +1,6 @@
 package com.comoressoft.mybudget.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +15,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
 @Table(name = "family")
-public class Family {
+public class Family implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4361263345050484444L;
 	@Id
 	@GeneratedValue(generator = "seq_family", strategy = GenerationType.SEQUENCE)
 	@Column(name = "id", nullable = false)
 	private Long id;
 	private String code;
 	private String pwd;
+	
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "family")
+	private List<User> user = new ArrayList<>();
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "family")
 	private List<Item> item = new ArrayList<>();

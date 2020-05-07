@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.trace.http.HttpTrace.Principal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,8 @@ public class BudgetController {
 
 	@Autowired
 	private BudgetServiceImpl budgetService;
-
+	
+	
 	@GetMapping(value = "/categories")
 	ResponseEntity<?> getCateegories(@RequestParam(value = "month", required = false) Integer month)
 			throws ServiceException {
@@ -42,7 +44,9 @@ public class BudgetController {
 	}
 
 	@GetMapping(value = "/items")
-	ResponseEntity<?> getitems(@RequestParam(value = "month", required = false) Integer month, @RequestParam(value="code_family")String codeFamily) throws ServiceException {
+	ResponseEntity<?> getitems(@RequestParam(value = "month", required = false) Integer month, Principal principal) throws ServiceException {
+		String codeFamily=budgetService.getFamily().getCode();
+		
 		List<ItemDTO> result=new ArrayList<>();
 		if(codeFamily!=null && !codeFamily.isEmpty()) {
 			 result = this.budgetService.getItems(month, codeFamily);
@@ -54,8 +58,8 @@ public class BudgetController {
 
 	@GetMapping(value = "/itemsBySubcat")
 	ResponseEntity<?> getitemsBySubCat(@RequestParam(value = "subcat_id", required = false) Long subcatId,
-			@RequestParam(value = "month", required = false) Integer month,
-			 @RequestParam(value="code_family")String codeFamily) throws ServiceException {
+			@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
+		String codeFamily=budgetService.getFamily().getCode();
 		
 		List<ItemDTO> result=new ArrayList<>();
 		if(codeFamily!=null && !codeFamily.isEmpty()) {
@@ -200,12 +204,6 @@ public class BudgetController {
 		return this.getResponseWithStatus(result);
 	}
 	
-	@GetMapping(value = "/logfamily")
-	ResponseEntity<?> logFamily(@RequestParam String code, String pwd) throws ServiceException {
-
-		FamilyDTO result = this.budgetService.findFamily(code, pwd);
-		
-		return this.getResponseWithStatus(result);
-	}
+	
 
 }

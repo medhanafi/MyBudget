@@ -21,6 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +42,7 @@ import com.comoressoft.mybudget.entity.Item;
 import com.comoressoft.mybudget.entity.ItemShoppingList;
 import com.comoressoft.mybudget.entity.ShoppingList;
 import com.comoressoft.mybudget.entity.SubCategory;
+import com.comoressoft.mybudget.entity.User;
 import com.comoressoft.mybudget.mapper.GlobalMapper;
 import com.comoressoft.mybudget.repository.CategoryRepository;
 import com.comoressoft.mybudget.repository.FamilyRepository;
@@ -62,11 +66,14 @@ public class BudgetServiceImpl {
 	private ShoppingListRepository shoppingListRepository;
 	@Autowired
 	private ItemShoppingListRepository itemShoppingListRepository;
-	
+
 	@Autowired
 	private FamilyRepository familyRepository;
 
 	GlobalMapper mapper = Mappers.getMapper(GlobalMapper.class);
+
+	@Autowired
+	private UserService userService;
 
 	public List<CategoryDTO> getCategories(Integer month) {
 		List<CategoryDTO> categories = new ArrayList<>();
@@ -107,7 +114,7 @@ public class BudgetServiceImpl {
 		SubCategory sub = subCategoryRepository.findById(subCatId).get();
 		Category cat = categoryRepository.findById(sub.getCategory().getId()).get();
 		cat.getSubCategory().remove(sub);
-		LOGGER.debug(sub.getSubCategoryLabel()+" "+cat.getCategoryLabel());
+		LOGGER.debug(sub.getSubCategoryLabel() + " " + cat.getCategoryLabel());
 		subCategoryRepository.deleteById(subCatId);
 	}
 
@@ -117,26 +124,26 @@ public class BudgetServiceImpl {
 	}
 
 	public List<Item> addManyItem(List<Item> itemsToSave) {
-		List<Item> items=new LinkedList<>(itemRepository.saveAll(itemsToSave));
+		List<Item> items = new LinkedList<>(itemRepository.saveAll(itemsToSave));
 		items.sort(new Comparator<Item>() {
-	        @Override
-	        public int compare(Item o1, Item o2) {
-	        	return (o1.getItemLabelle().compareTo(o2.getItemLabelle()));
-	        }
-	    });
+			@Override
+			public int compare(Item o1, Item o2) {
+				return (o1.getItemLabelle().compareTo(o2.getItemLabelle()));
+			}
+		});
 		return items;
 	}
 
 	public List<Item> getItems() {
-		
-		List<Item> items=new LinkedList<>(itemRepository.findAll());
-		
+
+		List<Item> items = new LinkedList<>(itemRepository.findAll());
+
 		items.sort(new Comparator<Item>() {
-	        @Override
-	        public int compare(Item o1, Item o2) {
-	            return (o1.getItemLabelle().compareTo(o2.getItemLabelle()));
-	        }
-	    });
+			@Override
+			public int compare(Item o1, Item o2) {
+				return (o1.getItemLabelle().compareTo(o2.getItemLabelle()));
+			}
+		});
 		return items;
 	}
 
@@ -240,29 +247,29 @@ public class BudgetServiceImpl {
 		}
 		return sum;
 	}
-	
+
 	private BigDecimal getActualAmountBySHLItem(SubCategoryDTO scat, int month) {
 		BigDecimal sum = new BigDecimal(0);
 
 		for (Item item : itemRepository.findBySubCategory(mapper.subCategoryDTOToSubCategory(scat))) {
 			if (item.getDateItem().getMonthValue() == month) {
-				sum=sum.add(getActualAmountBySHL(item));
+				sum = sum.add(getActualAmountBySHL(item));
 			}
 		}
 		return sum;
 	}
+
 	private BigDecimal getActualAmountBySHL(Item item) {
-		List<ItemShoppingList> itemShls =itemShoppingListRepository.findByItem(item);
-			BigDecimal sum = new BigDecimal(0);
-		for(ItemShoppingList ishl:itemShls) {
-			BigDecimal param = getAsDecimal(String.valueOf(ishl.getActualQuantity()))
-					.multiply(ishl.getActualAmount());
+		List<ItemShoppingList> itemShls = itemShoppingListRepository.findByItem(item);
+		BigDecimal sum = new BigDecimal(0);
+		for (ItemShoppingList ishl : itemShls) {
+			BigDecimal param = getAsDecimal(String.valueOf(ishl.getActualQuantity())).multiply(ishl.getActualAmount());
 			sum = sum.add(param);
 		}
 		return sum;
-		
-		
+
 	}
+
 	private BigDecimal calculatSubCatTotalCost(SubCategory scat) {
 		BigDecimal sum = new BigDecimal(0);
 
@@ -298,8 +305,8 @@ public class BudgetServiceImpl {
 				} else {
 					if (cat.getCatTotalCost() != null) {
 						for (SubCategoryDTO sCat : cat.getSubCategories()) {
-						BigDecimal st= getActualAmountBySHLItem(sCat, month);
-						sumDep = sumDep.add(st);
+							BigDecimal st = getActualAmountBySHLItem(sCat, month);
+							sumDep = sumDep.add(st);
 						}
 					}
 				}
@@ -347,7 +354,6 @@ public class BudgetServiceImpl {
 	private List<Item> getItemsByMonth(int month) {
 		return itemRepository.findByDateItemLtAndGt(month);
 	}
-	
 
 	public List<Category> getCategoriesEntityByMonth(int month) {
 		List<Item> items = getItemsByMonth(month);
@@ -476,28 +482,29 @@ public class BudgetServiceImpl {
 
 		return itemsDto;
 	}
-	
+
 	public List<ItemDTO> preloadItems(Integer month) {
 		List<Item> itemsPrev = new ArrayList<>();
 		List<Item> itemsAct = new ArrayList<>();
 		List<ItemDTO> itemsDto = null;
 		if (month != null && month != 0) {
-			if(this.getItemsByMonth(month).isEmpty()) {
-				itemsPrev = this.getItemsByMonth(month-1);
-				for(Item i:itemsPrev) {
-					Item item=new Item();
-					item.setDateItem(LocalDate.of(Calendar.getInstance().get(Calendar.YEAR), month, Calendar.getInstance().get(Calendar.DAY_OF_MONTH)));
+			if (this.getItemsByMonth(month).isEmpty()) {
+				itemsPrev = this.getItemsByMonth(month - 1);
+				for (Item i : itemsPrev) {
+					Item item = new Item();
+					item.setDateItem(LocalDate.of(Calendar.getInstance().get(Calendar.YEAR), month,
+							Calendar.getInstance().get(Calendar.DAY_OF_MONTH)));
 					item.setExpectedAmount(i.getExpectedAmount());
 					item.setExpectedQuantity(i.getExpectedQuantity());
 					item.setItemLabelle(i.getItemLabelle());
 					item.setSubCategory(i.getSubCategory());
 					itemsAct.add(item);
 				}
-				itemsAct=this.itemRepository.saveAll(itemsAct);
+				itemsAct = this.itemRepository.saveAll(itemsAct);
 			}
-		
+
 		}
-		
+
 		itemsDto = itemToItemDto(itemsAct);
 
 		return itemsDto;
@@ -627,7 +634,7 @@ public class BudgetServiceImpl {
 		} else {
 			items = this.getItems();
 		}
-		List<Item> itemsFamily =this.filterItemByFamily(items,codeFamily);
+		List<Item> itemsFamily = this.filterItemByFamily(items, codeFamily);
 		itemsDto = itemToItemDto(itemsFamily);
 
 		return itemsDto;
@@ -635,31 +642,31 @@ public class BudgetServiceImpl {
 
 	public List<ItemDTO> getItemsBySubCat(Long subCategorie, Integer month, String codeFamily) {
 		List<Item> items = itemRepository.findByMonthAndSubCat(month, subCategorie);
-		List<Item> itemsFamily =this.filterItemByFamily(items,codeFamily);
+		List<Item> itemsFamily = this.filterItemByFamily(items, codeFamily);
 		return itemToItemDto(itemsFamily);
 	}
 
 	public FamilyDTO addFamily(Family family) {
 		return this.mapper.familyToFamilyDTO(this.familyRepository.save(family));
-		
+
 	}
 
-	public List<Item> filterItemByFamily(List<Item> listItem, String codeFamily){
-	return	listItem.stream().filter(item -> item.getFamily().getCode().equals(codeFamily))     
-        .collect(Collectors.toList()); 
+	public List<Item> filterItemByFamily(List<Item> listItem, String codeFamily) {
+		return listItem.stream().filter(item -> item.getFamily().getCode().equals(codeFamily))
+				.collect(Collectors.toList());
 	}
-	
-	public List<ShoppingList> filterShoppingListByFamily(List<ShoppingList> listShoppingList, String codeFamily){
-		
-		return	listShoppingList.stream().filter(shl -> shl.getFamily().getCode().equals(codeFamily))     
-	        .collect(Collectors.toList()); 
-		}
+
+	public List<ShoppingList> filterShoppingListByFamily(List<ShoppingList> listShoppingList, String codeFamily) {
+
+		return listShoppingList.stream().filter(shl -> shl.getFamily().getCode().equals(codeFamily))
+				.collect(Collectors.toList());
+	}
 
 	public List<ShoppingListDTO> getShoppingLists(Integer month, String codeFamily) {
 		List<ShoppingList> lists = shoppingListRepository.findByCurrentDate(month);
-		
-		List<ShoppingList> shoppingListFamily =this.filterShoppingListByFamily(lists,codeFamily);
-		
+
+		List<ShoppingList> shoppingListFamily = this.filterShoppingListByFamily(lists, codeFamily);
+
 		List<ShoppingListDTO> listDto = new ArrayList<>();
 		for (ShoppingList shl : shoppingListFamily) {
 			listDto.add(mapper.shoppingListToShoppingListDTO(shl));
@@ -668,7 +675,17 @@ public class BudgetServiceImpl {
 	}
 
 	public FamilyDTO findFamily(String code, String pwd) {
-		Family family=this.familyRepository.findByCodeAndPwd(code,pwd);
+		Family family = this.familyRepository.findByCodeAndPwd(code, pwd);
 		return this.mapper.familyToFamilyDTO(family);
+	}
+
+	public Family getFamily() {
+		User user =new User();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+
+			user = userService.findByUsername(authentication.getName());
+		}
+		return user.getFamily();
 	}
 }

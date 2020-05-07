@@ -10,12 +10,14 @@ import com.comoressoft.mybudget.dto.ItemDTO;
 import com.comoressoft.mybudget.dto.ItemShoppingListDTO;
 import com.comoressoft.mybudget.dto.ShoppingListDTO;
 import com.comoressoft.mybudget.dto.SubCategoryDTO;
+import com.comoressoft.mybudget.dto.UserDTO;
 import com.comoressoft.mybudget.entity.Category;
 import com.comoressoft.mybudget.entity.Family;
 import com.comoressoft.mybudget.entity.Item;
 import com.comoressoft.mybudget.entity.ItemShoppingList;
 import com.comoressoft.mybudget.entity.ShoppingList;
 import com.comoressoft.mybudget.entity.SubCategory;
+import com.comoressoft.mybudget.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface GlobalMapper {
@@ -80,5 +82,8 @@ public interface GlobalMapper {
 	FamilyDTO familyToFamilyDTO(Family family);
 	
 	Family familyDTOToFamily(FamilyDTO family);
+	
+	User userDTOToUser(UserDTO userDto);
+	UserDTO userToUserDTO(User user);
 
 }
