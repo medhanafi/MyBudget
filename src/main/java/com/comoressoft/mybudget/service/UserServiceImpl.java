@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.comoressoft.mybudget.dto.UserDTO;
@@ -32,6 +33,7 @@ public class UserServiceImpl extends UserDetailsServiceImpl implements UserServi
 
 	@Override
 	public UserDTO save(User user) {
+		user.setPassword(new BCryptPasswordEncoder(8).encode(user.getPassword()));
 		return this.mapper.userToUserDTO(this.getRepository().save(user));
 	}
 

@@ -4,7 +4,8 @@
 
 DROP DATABASE IF EXISTS my_budget_db;
 
-DROP USER IF EXISTS my_budget_user;
+DROP OWNED BY my_budget_db CASCADE;
+DROP USER IF EXISTS my_budget_db;
 
 --------------------------------------------
 -- Create user

@@ -26,7 +26,6 @@ public class Family implements Serializable{
 	@Column(name = "id", nullable = false)
 	private Long id;
 	private String code;
-	private String pwd;
 	
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "family")
@@ -54,14 +53,7 @@ public class Family implements Serializable{
 		this.code = code;
 	}
 
-	public String getPwd() {
-		return pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-
+	
 	public List<Item> getItem() {
 		return item;
 	}

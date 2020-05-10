@@ -674,8 +674,8 @@ public class BudgetServiceImpl {
 		return listDto;
 	}
 
-	public FamilyDTO findFamily(String code, String pwd) {
-		Family family = this.familyRepository.findByCodeAndPwd(code, pwd);
+	public FamilyDTO findFamily(String code) {
+		Family family = this.familyRepository.findByCode(code);
 		return this.mapper.familyToFamilyDTO(family);
 	}
 
@@ -687,5 +687,14 @@ public class BudgetServiceImpl {
 			user = userService.findByUsername(authentication.getName());
 		}
 		return user.getFamily();
+	}
+
+	public List<FamilyDTO> getFamilies() {
+		List<Family> lists =this.familyRepository.findAll();
+		List<FamilyDTO> families=new ArrayList<>();
+		for(Family family:lists){
+			families.add(this.mapper.familyToFamilyDTO(family));
+		}
+		return families;
 	}
 }

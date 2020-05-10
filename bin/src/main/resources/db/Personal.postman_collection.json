@@ -1,0 +1,434 @@
+{
+	"info": {
+		"_postman_id": "b4d2c59e-d060-45a4-924f-8629b8e10d74",
+		"name": "Personal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "all category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/categories",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "category by month",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/categories/?month=4",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"categories",
+						""
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "item by month",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "code_family",
+						"value": "MHA14633",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/items?month=4",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"items"
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "additem",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"itemId\": 965,\n        \"itemStatus\": \"not_used\"\n    }"
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/additem",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"additem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all summary",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/summary/3",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"summary",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "item by subcat and month",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "code_family",
+						"value": "MHA14633",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/itemsBySubcat/?month=3&subcat_id=21",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"itemsBySubcat",
+						""
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "3"
+						},
+						{
+							"key": "subcat_id",
+							"value": "21"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sub category by category and month",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/subcatsBycate?cat_id=4&month=2",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"subcatsBycate"
+					],
+					"query": [
+						{
+							"key": "cat_id",
+							"value": "4"
+						},
+						{
+							"key": "month",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create ShoppingList",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"dateCreated\":\"2019-03-07\",\n\t\"allocatedAmount\":\"89\"\n}"
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/createShoppingList",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"createShoppingList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add item to shopping list",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/addItemToShoppingList?itemId=682&month=5&idSHL=47",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"addItemToShoppingList"
+					],
+					"query": [
+						{
+							"key": "itemId",
+							"value": "682"
+						},
+						{
+							"key": "month",
+							"value": "5"
+						},
+						{
+							"key": "idSHL",
+							"value": "47"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "shoppinglist by id itemshopping list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/itemShoppingList?idSHL=-42",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"itemShoppingList"
+					],
+					"query": [
+						{
+							"key": "idSHL",
+							"value": "-42"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addcategory",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"catId\": 4,\n    \"catLabel\": \"Vie quotidienne\",\n    \"catState\": \"active\",\n    \"catTotalCost\": 3.73\n}"
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/addcategory",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"addcategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{serverLocal}}/api/addfamily",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"MHA14633\",\n    \"pwd\": \"Samih\"\n}"
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/addfamily",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"addfamily"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{serverLocal}}/api/shoppingLists?month=3",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "code_family",
+						"value": "MHA14633",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/shoppingLists?month=3",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"shoppingLists"
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{serverLocal}}/api/logfamily?code=MHA14633&pwd=Samih",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{serverLocal}}/api/logfamily?code=MHA14633&pwd=Samih",
+					"host": [
+						"{{serverLocal}}"
+					],
+					"path": [
+						"api",
+						"logfamily"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "MHA14633"
+						},
+						{
+							"key": "pwd",
+							"value": "Samih"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

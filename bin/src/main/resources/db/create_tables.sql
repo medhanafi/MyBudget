@@ -76,6 +76,4 @@ CREATE TABLE item_shopping_list (
 	CONSTRAINT fk_shooping_list_ FOREIGN KEY (shopping_list) REFERENCES shopping_list(id)
 );
 
-
-
 commit;

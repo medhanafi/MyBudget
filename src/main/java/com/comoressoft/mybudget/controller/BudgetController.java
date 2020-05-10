@@ -204,6 +204,13 @@ public class BudgetController {
 		return this.getResponseWithStatus(result);
 	}
 	
+	@PostMapping(value = "/getfamilies")
+	ResponseEntity<?> getFamily() throws ServiceException {
+
+		List<FamilyDTO> result = this.budgetService.getFamilies();
+		return this.getResponseWithStatus(result);
+	}
+	
 	
 
 }

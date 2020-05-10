@@ -1,6 +1,3 @@
-
-alter table user_ add constraint FKbcu8p5b5n8n5kw7olernwnnq0 foreign key (family) references family;
-
 CREATE TABLE oauth_access_token (
   token_id VARCHAR(255),
   TOKEN BYTEA,

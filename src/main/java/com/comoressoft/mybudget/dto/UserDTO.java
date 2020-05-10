@@ -4,6 +4,7 @@ public class UserDTO {
 
 	private Long id;
 	private String username;
+	private String password;
 	private boolean accountExpired;
 
 	private boolean accountLocked;
@@ -67,6 +68,14 @@ public class UserDTO {
 
 	public void setFamily(FamilyDTO family) {
 		this.family = family;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	
