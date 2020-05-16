@@ -3,11 +3,15 @@ package com.comoressoft.mybudget.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
 public class ItemDTO {
 	private Long itemId;
 	private String itemLabelle;
 	private BigDecimal expectedAmount;
 	private int expectedQuantity;
+	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate dateItem;
 	private String itemStatus;
 	private SubCategoryDTO subCategory;

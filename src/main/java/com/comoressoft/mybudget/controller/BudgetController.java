@@ -63,12 +63,27 @@ public class BudgetController {
 		
 		List<ItemDTO> result=new ArrayList<>();
 		if(codeFamily!=null && !codeFamily.isEmpty()) {
-		result = this.budgetService.getItemsBySubCat(subcatId, month, codeFamily);
+		result = this.budgetService.getItemsBySubCatOrCat(subcatId, month, codeFamily);
 		}else{
 			result = this.budgetService.getItemsBySubCat(subcatId, month);
 		}
 		return this.getResponseWithStatus(result);
 	}
+	
+	@GetMapping(value = "/itemsBySubcatLabell")
+	ResponseEntity<?> getitemsBySubCatLabell(@RequestParam(value = "item_label", required = false) String item_label,
+			@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
+		String codeFamily=budgetService.getFamily().getCode();
+		
+		List<ItemDTO> result=new ArrayList<>();
+		if(codeFamily!=null && !codeFamily.isEmpty()) {
+		result = this.budgetService.getItemsBySubCatOrCat(item_label, month, codeFamily);
+		}else{
+			result = this.budgetService.getItemsBySubCat(item_label, month);
+		}
+		return this.getResponseWithStatus(result);
+	}
+	
 
 	@GetMapping(value = "/subcatsBycate")
 	ResponseEntity<?> getSubCatByCat(@RequestParam(value = "cat_id", required = false) Long catId,

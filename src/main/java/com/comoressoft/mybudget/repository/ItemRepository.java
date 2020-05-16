@@ -34,4 +34,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 	@Query("DELETE FROM #{#entityName} where id=:itemId")
 	void deleteItemById(@Param("itemId") Long itemId);
 
+	
+	@Query("select i from #{#entityName} i where extract(month from i.dateItem)=:monthValue and subCategory.subCategoryLabel=:item_label")
+	List<Item> findByMonthAndSubCat(Integer monthValue, String item_label);
+
+	
+
 }

@@ -524,6 +524,20 @@ public class BudgetServiceImpl {
 		List<Item> items = itemRepository.findByMonthAndSubCat(month, subCategorie);
 		return itemToItemDto(items);
 	}
+	
+	public List<ItemDTO> getItemsBySubCatOrCat(Long id, Integer month, String codeFamily) {
+		List<Item> items = itemRepository.findByMonthAndSubCat(month, id);
+		List<Long> subCatIds=new ArrayList<>();
+		if(items.isEmpty()) {
+			subCategoryRepository.findByCategory(categoryRepository.getOne(id)).forEach(subCat->{
+				subCatIds.add(subCat.getId());	
+			});
+		}
+		for(Long idSub:subCatIds) {
+			items=itemRepository.findByMonthAndSubCat(month, idSub);
+		}
+		return itemToItemDto(items);
+	}
 
 	public ItemDTO addItem(ItemDTO itemDto) {
 		Item item = mapper.itemDTOToItem(itemDto);
@@ -696,5 +710,26 @@ public class BudgetServiceImpl {
 			families.add(this.mapper.familyToFamilyDTO(family));
 		}
 		return families;
+	}
+
+	public List<ItemDTO> getItemsBySubCat(String item_label, Integer month) {
+		List<Item> items = itemRepository.findByMonthAndSubCat(month, item_label);
+		return itemToItemDto(items);
+		
+	}
+
+	public List<ItemDTO> getItemsBySubCatOrCat(String item_label, Integer month, String codeFamily) {
+		List<Item> items = itemRepository.findByMonthAndSubCat(month, item_label);
+		List<Long> subCatIds=new ArrayList<>();
+		if(items.isEmpty()) {
+			subCategoryRepository.findByCategory(categoryRepository.findByCategoryLabel(item_label)).forEach(subCat->{
+				subCatIds.add(subCat.getId());	
+			});
+		}
+		for(Long idSub:subCatIds) {
+			items=itemRepository.findByMonthAndSubCat(month, idSub);
+		}
+		return itemToItemDto(items);
+		
 	}
 }
