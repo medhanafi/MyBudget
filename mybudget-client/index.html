@@ -1,0 +1,45 @@
+<html lang="fr">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <script src="js/budget.js"></script>
+</head>
+
+<body>
+    <div class="card border-default mb-3" style="max-width: 400px; margin-left: auto; margin-right: auto; margin-top: 40px;">
+        <article class="card-body mx-auto" style="max-width: 400px;">
+            <h4 class="card-title mt-3 text-center">Authentification</h4>
+
+            <form name="formLogin" id="formLogin" method="POST">
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <input name="userName" id="userName" class="form-control " placeholder="Nom d'utilisateur" type="text">
+                </div>
+                <!-- form-group// -->
+
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input class="form-control" name="userPassword" id="userPassword" placeholder="Mot de passe" type="password">
+                </div>
+                <!-- form-group// -->
+
+                <div class="form-group">
+                    <button type="button" id="btnLogin" class="btn btn-primary btn-block">Se connecter</button>
+                </div>
+            </form>
+        </article>
+    </div>
+    <!-- card.// -->
+</body>
+
+</html>
