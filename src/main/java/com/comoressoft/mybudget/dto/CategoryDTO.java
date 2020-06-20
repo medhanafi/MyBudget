@@ -7,6 +7,7 @@ public class CategoryDTO {
 	private Long catId;
 	private String catLabel;
 	private String catState;
+	private String catType;
 	private BigDecimal catTotalCost;
 
 	private List<SubCategoryDTO> subCategories;
@@ -49,6 +50,14 @@ public class CategoryDTO {
 
 	public void setSubCategories(List<SubCategoryDTO> subCategories) {
 		this.subCategories = subCategories;
+	}
+
+	public String getCatType() {
+		return catType;
+	}
+
+	public void setCatType(String catType) {
+		this.catType = catType;
 	}
 
 }

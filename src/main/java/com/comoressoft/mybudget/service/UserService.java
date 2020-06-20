@@ -13,6 +13,8 @@ public interface UserService {
     UserDTO save(User user);
 
     UserDTO findOne(long id) throws Exception;
+    
+    UserDTO findOne(String name) throws Exception;
 
     void delete(Long id);
 

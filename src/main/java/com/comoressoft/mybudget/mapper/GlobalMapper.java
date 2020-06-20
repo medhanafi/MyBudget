@@ -29,6 +29,7 @@ public interface GlobalMapper {
 	@Mappings({ @Mapping(target = "catId", source = "id"), @Mapping(target = "catLabel", source = "categoryLabel"),
 			@Mapping(target = "catState", source = "categoryState"),
 			@Mapping(target = "catTotalCost", source = "categoryTotalCost"),
+			@Mapping(target = "catType", source = "categoryType"),
 			@Mapping(target = "subCategories", source = "subCategory") })
 	CategoryDTO categoryToCategoryDTO(Category category);
 
@@ -40,6 +41,7 @@ public interface GlobalMapper {
 	@Mappings({ @Mapping(target = "id", source = "catId"), @Mapping(target = "categoryLabel", source = "catLabel"),
 			@Mapping(target = "categoryState", source = "catState"),
 			@Mapping(target = "categoryTotalCost", source = "catTotalCost"),
+			@Mapping(target = "categoryType", source = "catType"),
 			@Mapping(target = "subCategory", source = "subCategories") })
 	Category categoryDTOToCategory(CategoryDTO categoryDTO);
 

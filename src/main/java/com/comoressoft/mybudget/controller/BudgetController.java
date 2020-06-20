@@ -42,6 +42,15 @@ public class BudgetController {
 		List<CategoryDTO> result = this.budgetService.getCategories(month);
 		return this.getResponseWithStatus(result);
 	}
+	
+	@GetMapping(value = "/categories/{categoryType}")
+	ResponseEntity<?> getCateegoriesByType(@RequestParam(value = "month", required = false) Integer month,
+			@PathVariable String categoryType)
+			throws ServiceException {
+
+		List<CategoryDTO> result = this.budgetService.getCategoriesByType(month, categoryType);
+		return this.getResponseWithStatus(result);
+	}
 
 	@GetMapping(value = "/items")
 	ResponseEntity<?> getitems(@RequestParam(value = "month", required = false) Integer month, Principal principal) throws ServiceException {

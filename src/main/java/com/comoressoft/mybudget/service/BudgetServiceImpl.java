@@ -732,4 +732,17 @@ public class BudgetServiceImpl {
 		return itemToItemDto(items);
 		
 	}
+
+	public List<CategoryDTO> getCategoriesByType(Integer month, String categoryType) {
+		List<CategoryDTO> categories = new ArrayList<>();
+
+		List<Category> listCat = categoryRepository.findCategoryByCategoryType(categoryType);
+		if (month != null && month != 0) {
+			categories = this.getCategoriesByMonth(listCat, month);
+		} else {
+			this.categoryToCategoryDTO(listCat, categories);
+		}
+
+		return categories;
+	}
 }

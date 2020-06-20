@@ -30,6 +30,9 @@ public class Category {
 
 	@Column(length = 25)
 	private String categoryState;
+	
+	@Column(length = 30)
+	private String categoryType;
 
 	@Column(length = 11, precision = 10, scale = 2)
 	@Type(type = "big_decimal")
@@ -76,6 +79,14 @@ public class Category {
 
 	public void setSubCategory(List<SubCategory> subCategory) {
 		this.subCategory = subCategory;
+	}
+
+	public String getCategoryType() {
+		return categoryType;
+	}
+
+	public void setCategoryType(String categoryType) {
+		this.categoryType = categoryType;
 	}
 
 }

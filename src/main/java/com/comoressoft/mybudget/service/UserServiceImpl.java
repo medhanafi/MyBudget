@@ -46,6 +46,17 @@ public class UserServiceImpl extends UserDetailsServiceImpl implements UserServi
 			throw new Exception("User not found");
 		}
 	}
+	
+
+	@Override
+	public UserDTO findOne(String name) throws Exception {
+		User uData = this.getRepository().findByUsername(name);
+		if (uData!=null) {
+			return this.mapper.userToUserDTO(uData);
+		} else {
+			throw new Exception("User not found");
+		}
+	}
 
 	@Override
 	public void delete(Long id) {
