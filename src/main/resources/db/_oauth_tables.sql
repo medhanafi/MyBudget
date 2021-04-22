@@ -19,13 +19,13 @@ CREATE TABLE oauth_refresh_token (
 
 -- pwd: user-T@sk_kmS0ft
 INSERT INTO user_
-(account_expired, account_locked, credentials_expired, enabled, "password", user_name)
-VALUES(false, false, false, true, '$2a$04$agEtvQxw54Q1nb5X5x7rl.TVV.0WIFpzZf3k5wrTUVQw/gUGFnUTK', 'tasks_user');
+(account_expired, account_locked, credentials_expired, enabled, "password", user_name, family)
+VALUES(false, false, false, true, '$2a$04$agEtvQxw54Q1nb5X5x7rl.TVV.0WIFpzZf3k5wrTUVQw/gUGFnUTK', 'tasks_user', 86);
 
 -- pwd: admin-T@sk_kmS0ft
 INSERT INTO user_
-(account_expired, account_locked, credentials_expired, enabled, "password", user_name)
-VALUES(false, false, false, true, '$2a$04$osEqPg/qjfAi4Xc95KLsU.lRC0/o9VZ/1WZRUCKYV/D9S1yGyZ8ny',	'tasks_admin');
+(account_expired, account_locked, credentials_expired, enabled, "password", user_name, family)
+VALUES(false, false, false, true, '$2a$04$osEqPg/qjfAi4Xc95KLsU.lRC0/o9VZ/1WZRUCKYV/D9S1yGyZ8ny',	'tasks_admin', 86);
 
 
 
