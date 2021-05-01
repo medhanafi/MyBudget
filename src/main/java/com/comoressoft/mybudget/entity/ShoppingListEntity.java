@@ -20,7 +20,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "shopping_list")
-public class ShoppingList {
+public class ShoppingListEntity {
 
 	@Id
 	@GeneratedValue(generator = "seq_shopping_list", strategy = GenerationType.SEQUENCE)
@@ -38,20 +38,20 @@ public class ShoppingList {
 	private BigDecimal allocatedAmount;
 	
 	@ManyToOne
-	private Family family;
+	private FamilyEntity family;
 
 	// @ManyToMany(fetch = FetchType.LAZY, mappedBy = "shoppingList")
 	// @JsonIgnore
 	// private List<Item> items = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingList")
-	private Set<ItemShoppingList> itemShoppingList = new HashSet<>();
+	private Set<ItemShoppingListEntity> itemShoppingList = new HashSet<>();
 
-	public ShoppingList(Long idSHL) {
+	public ShoppingListEntity(Long idSHL) {
 		this.id = idSHL;
 	}
 
-	public ShoppingList() {
+	public ShoppingListEntity() {
 		super();
 	}
 
@@ -91,19 +91,19 @@ public class ShoppingList {
 		this.allocatedAmount = allocatedAmount;
 	}
 
-	public Set<ItemShoppingList> getItemShoppingList() {
+	public Set<ItemShoppingListEntity> getItemShoppingList() {
 		return itemShoppingList;
 	}
 
-	public void setItemShoppingList(Set<ItemShoppingList> itemShoppingList) {
+	public void setItemShoppingList(Set<ItemShoppingListEntity> itemShoppingList) {
 		this.itemShoppingList = itemShoppingList;
 	}
 
-	public Family getFamily() {
+	public FamilyEntity getFamily() {
 		return family;
 	}
 
-	public void setFamily(Family family) {
+	public void setFamily(FamilyEntity family) {
 		this.family = family;
 	}
 

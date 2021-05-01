@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.comoressoft.mybudget.dto.CategoryDTO;
-import com.comoressoft.mybudget.dto.FamilyDTO;
-import com.comoressoft.mybudget.dto.ItemDTO;
-import com.comoressoft.mybudget.dto.ItemShoppingListDTO;
-import com.comoressoft.mybudget.dto.ShoppingListDTO;
-import com.comoressoft.mybudget.dto.SubCategoryDTO;
-import com.comoressoft.mybudget.entity.ShoppingList;
+import com.comoressoft.mybudget.dto.Category;
+import com.comoressoft.mybudget.dto.Family;
+import com.comoressoft.mybudget.dto.Item;
+import com.comoressoft.mybudget.dto.ItemShoppingList;
+import com.comoressoft.mybudget.dto.ShoppingList;
+import com.comoressoft.mybudget.dto.SubCategory;
+import com.comoressoft.mybudget.entity.FamilyEntity;
+import com.comoressoft.mybudget.entity.ShoppingListEntity;
 import com.comoressoft.mybudget.service.BudgetServiceImpl;
-import com.comoressoft.mybudget.entity.Family;
 
 @RestController
 @RequestMapping("/api")
@@ -33,25 +33,25 @@ public class BudgetController {
 
 	@Autowired
 	private BudgetServiceImpl budgetService;
-	
-	
+
 	@GetMapping(value = "/categories")
 	ResponseEntity<?> getCateegories(@RequestParam(value = "month", required = false) Integer month)
 			throws ServiceException {
 
-		List<CategoryDTO> result = this.budgetService.getCategories(month);
+		List<Category> result = this.budgetService.getCategories(month);
 		return this.getResponseWithStatus(result);
 	}
 
 	@GetMapping(value = "/items")
-	ResponseEntity<?> getitems(@RequestParam(value = "month", required = false) Integer month, Principal principal) throws ServiceException {
-		String codeFamily=budgetService.getFamily().getCode();
-		
-		List<ItemDTO> result=new ArrayList<>();
-		if(codeFamily!=null && !codeFamily.isEmpty()) {
-			 result = this.budgetService.getItems(month, codeFamily);
-		}else {
-		 result = this.budgetService.getItems(month);
+	ResponseEntity<?> getitems(@RequestParam(value = "month", required = false) Integer month, Principal principal)
+			throws ServiceException {
+		String codeFamily = budgetService.getCodeFamily();
+
+		List<Item> result = new ArrayList<>();
+		if (codeFamily != null && !codeFamily.isEmpty()) {
+			result = this.budgetService.getItems(month, codeFamily);
+		} else {
+			result = this.budgetService.getItems(month);
 		}
 		return this.getResponseWithStatus(result);
 	}
@@ -59,12 +59,12 @@ public class BudgetController {
 	@GetMapping(value = "/itemsBySubcat")
 	ResponseEntity<?> getitemsBySubCat(@RequestParam(value = "subcat_id", required = false) Long subcatId,
 			@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
-		String codeFamily=budgetService.getFamily().getCode();
-		
-		List<ItemDTO> result=new ArrayList<>();
-		if(codeFamily!=null && !codeFamily.isEmpty()) {
-		result = this.budgetService.getItemsBySubCat(subcatId, month, codeFamily);
-		}else{
+		String codeFamily = budgetService.getCodeFamily();
+
+		List<Item> result = new ArrayList<>();
+		if (codeFamily != null && !codeFamily.isEmpty()) {
+			result = this.budgetService.getItemsBySubCat(subcatId, month, codeFamily);
+		} else {
 			result = this.budgetService.getItemsBySubCat(subcatId, month);
 		}
 		return this.getResponseWithStatus(result);
@@ -74,62 +74,56 @@ public class BudgetController {
 	ResponseEntity<?> getSubCatByCat(@RequestParam(value = "cat_id", required = false) Long catId,
 			@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
 
-		List<SubCategoryDTO> result = this.budgetService.getSubCategoryByCategory(catId, month);
+		List<SubCategory> result = this.budgetService.getSubCategoryByCategory(catId, month);
 		return this.getResponseWithStatus(result);
 	}
+
 	@PostMapping(value = "/addcategory")
-	ResponseEntity<?> addCategory(@RequestBody CategoryDTO categoryDto) throws ServiceException {
+	ResponseEntity<?> addCategory(@RequestBody Category categoryDto) throws ServiceException {
 
-		CategoryDTO result = this.budgetService.addCategory(categoryDto);
+		Category result = this.budgetService.addCategory(categoryDto);
 		return this.getResponseWithStatus(result);
 	}
-	
+
 	@PostMapping(value = "/addsubcategory")
-	ResponseEntity<?> addSubCategory(@RequestBody SubCategoryDTO subCategoryDto) throws ServiceException {
+	ResponseEntity<?> addSubCategory(@RequestBody SubCategory subCategoryDto) throws ServiceException {
 
-		SubCategoryDTO result = this.budgetService.addSubCategory(subCategoryDto);
+		SubCategory result = this.budgetService.addSubCategory(subCategoryDto);
 		return this.getResponseWithStatus(result);
 	}
-	
-	
+
 	@PutMapping(value = "/deletecategory")
 	ResponseEntity<?> delCategory(@RequestParam(value = "cat_id") Long catId) throws ServiceException {
 
 		this.budgetService.deleteCategory(catId);
-		return new ResponseEntity<String>("{\r\n" + 
-				"        \"error\":0,\r\n" +
-				"    }", HttpStatus.OK);
+		return new ResponseEntity<String>("{\r\n" + "        \"error\":0,\r\n" + "    }", HttpStatus.OK);
 	}
+
 	@PutMapping(value = "/deletesubcategory")
 	ResponseEntity<?> delSubCategory(@RequestParam(value = "sub_cat_id") Long subCatId) throws ServiceException {
 
 		this.budgetService.deleteSubCategory(subCatId);
-		return new ResponseEntity<String>("{\r\n" + 
-				"        \"error\":0,\r\n" +
-				"    }", HttpStatus.OK);
+		return new ResponseEntity<String>("{\r\n" + "        \"error\":0,\r\n" + "    }", HttpStatus.OK);
 	}
-	
+
 	@PutMapping(value = "/deleteitem")
 	ResponseEntity<?> delItem(@RequestParam(value = "item_id") Long itemId) throws ServiceException {
 
 		this.budgetService.deleteItem(itemId);
-		return new ResponseEntity<String>("{\r\n" + 
-				"        \"error\":0,\r\n" +
-				"    }", HttpStatus.OK);
+		return new ResponseEntity<String>("{\r\n" + "        \"error\":0,\r\n" + "    }", HttpStatus.OK);
 	}
-	
-	@PostMapping(value = "/additem")
-	ResponseEntity<?> addItem(@RequestBody ItemDTO itemDto) throws ServiceException {
 
-		ItemDTO result = this.budgetService.addItem(itemDto);
+	@PostMapping(value = "/additem")
+	ResponseEntity<?> addItem(@RequestBody Item itemDto) throws ServiceException {
+
+		Item result = this.budgetService.addItem(itemDto);
 		return this.getResponseWithStatus(result);
 	}
-	
-	
-	@PostMapping(value = "/addShoppingList")
-	ResponseEntity<?> createShoppingList(@RequestBody ShoppingList shop) throws ServiceException {
 
-		ShoppingListDTO result = this.budgetService.addShoppingLists(shop);
+	@PostMapping(value = "/addShoppingList")
+	ResponseEntity<?> createShoppingList(@RequestBody ShoppingListEntity shop) throws ServiceException {
+
+		ShoppingList result = this.budgetService.addShoppingLists(shop);
 		return this.getResponseWithStatus(result);
 	}
 
@@ -137,33 +131,32 @@ public class BudgetController {
 	ResponseEntity<?> addItemShoppingList(@RequestParam(value = "itemId") Long itemId,
 			@RequestParam(value = "idSHL") Long idSHL) throws ServiceException {
 
-		ItemShoppingListDTO result = this.budgetService.addItemToShoppingList(itemId, idSHL);
+		ItemShoppingList result = this.budgetService.addItemToShoppingList(itemId, idSHL);
 		return this.getResponseWithStatus(result);
 	}
 
 	@PostMapping(value = "/updateItemShoppingList")
-	ResponseEntity<?> updateItemShoppingList(@RequestBody ItemShoppingListDTO shop) throws ServiceException {
+	ResponseEntity<?> updateItemShoppingList(@RequestBody ItemShoppingList shop) throws ServiceException {
 
-		ItemShoppingListDTO result = this.budgetService.updateItemShoppingList(shop);
+		ItemShoppingList result = this.budgetService.updateItemShoppingList(shop);
 		return this.getResponseWithStatus(result);
 	}
 
 	@GetMapping(value = "itemShoppingList")
 	ResponseEntity<?> getItemShoppingList(@RequestParam(value = "idSHL") Long idSHL) throws ServiceException {
 
-		List<ItemShoppingListDTO> result = this.budgetService.getItemShoppingList(idSHL);
+		List<ItemShoppingList> result = this.budgetService.getItemShoppingList(idSHL);
 		return this.getResponseWithStatus(result);
 	}
 
 	@GetMapping(value = "/shoppingLists")
 	ResponseEntity<?> getShoppingLists(@RequestParam(value = "month", required = false) Integer month,
-			@RequestParam(value="code_family")String codeFamily)
-			throws ServiceException {
-		List<ShoppingListDTO> result =new ArrayList<>();
-		if(codeFamily!=null && !codeFamily.isEmpty()) {
-			result= this.budgetService.getShoppingLists(month, codeFamily);
-		}else {
-		result= this.budgetService.getShoppingLists(month);
+			@RequestParam(value = "code_family") String codeFamily) throws ServiceException {
+		List<ShoppingList> result = new ArrayList<>();
+		if (codeFamily != null && !codeFamily.isEmpty()) {
+			result = this.budgetService.getShoppingLists(month, codeFamily);
+		} else {
+			result = this.budgetService.getShoppingLists(month);
 		}
 		return this.getResponseWithStatus(result);
 	}
@@ -178,15 +171,14 @@ public class BudgetController {
 			return this.getResponseWithStatus(this.budgetService.getSummary());
 		}
 	}
-	
-	@GetMapping(value = "/preloaditems")
-	ResponseEntity<?> preloaditems(@RequestParam(value = "month", required = false) Integer month) throws ServiceException {
 
-		List<ItemDTO> result = this.budgetService.preloadItems(month);
+	@GetMapping(value = "/preloaditems")
+	ResponseEntity<?> preloaditems(@RequestParam(value = "month", required = false) Integer month)
+			throws ServiceException {
+
+		List<Item> result = this.budgetService.preloadItems(month);
 		return this.getResponseWithStatus(result);
 	}
-
-	
 
 	private <T> ResponseEntity<?> getResponseWithStatus(T result) {
 		if (result == null) {
@@ -196,14 +188,11 @@ public class BudgetController {
 		}
 	}
 
-	
 	@PostMapping(value = "/addfamily")
-	ResponseEntity<?> addFamily(@RequestBody Family family) throws ServiceException {
+	ResponseEntity<?> addFamily(@RequestBody FamilyEntity family) throws ServiceException {
 
-		FamilyDTO result = this.budgetService.addFamily(family);
+		Family result = this.budgetService.addFamily(family);
 		return this.getResponseWithStatus(result);
 	}
-	
-	
 
 }

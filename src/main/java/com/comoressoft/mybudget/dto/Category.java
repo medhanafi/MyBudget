@@ -3,13 +3,13 @@ package com.comoressoft.mybudget.dto;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class CategoryDTO {
+public class Category {
 	private Long catId;
 	private String catLabel;
 	private String catState;
 	private BigDecimal catTotalCost;
 
-	private List<SubCategoryDTO> subCategories;
+	private List<SubCategory> subCategories;
 
 	public Long getCatId() {
 		return catId;
@@ -43,11 +43,11 @@ public class CategoryDTO {
 		this.catTotalCost = catTotalCost;
 	}
 
-	public List<SubCategoryDTO> getSubCategories() {
+	public List<SubCategory> getSubCategories() {
 		return subCategories;
 	}
 
-	public void setSubCategories(List<SubCategoryDTO> subCategories) {
+	public void setSubCategories(List<SubCategory> subCategories) {
 		this.subCategories = subCategories;
 	}
 

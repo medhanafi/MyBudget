@@ -4,20 +4,18 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-import com.comoressoft.mybudget.dto.CategoryDTO;
-import com.comoressoft.mybudget.dto.FamilyDTO;
-import com.comoressoft.mybudget.dto.ItemDTO;
-import com.comoressoft.mybudget.dto.ItemShoppingListDTO;
-import com.comoressoft.mybudget.dto.ShoppingListDTO;
-import com.comoressoft.mybudget.dto.SubCategoryDTO;
-import com.comoressoft.mybudget.dto.UserDTO;
-import com.comoressoft.mybudget.entity.Category;
-import com.comoressoft.mybudget.entity.Family;
-import com.comoressoft.mybudget.entity.Item;
-import com.comoressoft.mybudget.entity.ItemShoppingList;
-import com.comoressoft.mybudget.entity.ShoppingList;
-import com.comoressoft.mybudget.entity.SubCategory;
-import com.comoressoft.mybudget.entity.User;
+import com.comoressoft.mybudget.dto.Category;
+import com.comoressoft.mybudget.dto.Family;
+import com.comoressoft.mybudget.dto.Item;
+import com.comoressoft.mybudget.dto.ItemShoppingList;
+import com.comoressoft.mybudget.dto.ShoppingList;
+import com.comoressoft.mybudget.dto.SubCategory;
+import com.comoressoft.mybudget.entity.CategoryEntity;
+import com.comoressoft.mybudget.entity.FamilyEntity;
+import com.comoressoft.mybudget.entity.ItemEntity;
+import com.comoressoft.mybudget.entity.ItemShoppingListEntity;
+import com.comoressoft.mybudget.entity.ShoppingListEntity;
+import com.comoressoft.mybudget.entity.SubCategoryEntity;
 
 @Mapper(componentModel = "spring")
 public interface GlobalMapper {
@@ -30,7 +28,7 @@ public interface GlobalMapper {
 			@Mapping(target = "catState", source = "categoryState"),
 			@Mapping(target = "catTotalCost", source = "categoryTotalCost"),
 			@Mapping(target = "subCategories", source = "subCategory") })
-	CategoryDTO categoryToCategoryDTO(Category category);
+	Category categoryToCategoryDTO(CategoryEntity category);
 
 	/**
 	 * 
@@ -41,7 +39,7 @@ public interface GlobalMapper {
 			@Mapping(target = "categoryState", source = "catState"),
 			@Mapping(target = "categoryTotalCost", source = "catTotalCost"),
 			@Mapping(target = "subCategory", source = "subCategories") })
-	Category categoryDTOToCategory(CategoryDTO categoryDTO);
+	CategoryEntity categoryDTOToCategory(Category categoryDTO);
 
 	/**
 	 * 
@@ -52,7 +50,7 @@ public interface GlobalMapper {
 	@Mapping(target = "subCatLabel", source = "subCategoryLabel")
 	@Mapping(target = "subCatState", source = "subCategoryState")
 	@Mapping(target = "subCatTotalCost", source = "subCategoryTotalCost")
-	SubCategoryDTO subCategoryToSubCategoryDTO(SubCategory subCategory);
+	SubCategory subCategoryToSubCategoryDTO(SubCategoryEntity subCategory);
 
 	/**
 	 * 
@@ -63,27 +61,25 @@ public interface GlobalMapper {
 			@Mapping(target = "subCategoryLabel", source = "subCatLabel"),
 			@Mapping(target = "subCategoryState", source = "subCatState"),
 			@Mapping(target = "subCategoryTotalCost", source = "subCatTotalCost") })
-	SubCategory subCategoryDTOToSubCategory(SubCategoryDTO subCategoryDTO);
+	SubCategoryEntity subCategoryDTOToSubCategory(SubCategory subCategoryDTO);
 
 	@Mapping(target = "itemId", source = "id")
-	ItemDTO itemToItemDTO(Item item);
+	Item itemToItemDTO(ItemEntity item);
 
 	@Mapping(target = "id", source = "itemId")
-	Item itemDTOToItem(ItemDTO itemDTO);
+	ItemEntity itemDTOToItem(Item itemDTO);
 
-	ShoppingListDTO shoppingListToShoppingListDTO(ShoppingList shoppingList);
+	ShoppingList shoppingListToShoppingListDTO(ShoppingListEntity shoppingList);
 
-	ShoppingList shoppingListDTOToShoppingList(ShoppingListDTO shoppingListDTO);
+	ShoppingListEntity shoppingListDTOToShoppingList(ShoppingList shoppingListDTO);
 
-	ItemShoppingListDTO itemShoppingListToITemShoppingListDTO(ItemShoppingList itemShoppingList);
+	ItemShoppingList itemShoppingListToITemShoppingListDTO(ItemShoppingListEntity itemShoppingList);
 
-	ItemShoppingList itemShoppingListDTOToITemShoppingList(ItemShoppingListDTO itemShoppingListDTO);
+	ItemShoppingListEntity itemShoppingListDTOToITemShoppingList(ItemShoppingList itemShoppingListDTO);
 	
-	FamilyDTO familyToFamilyDTO(Family family);
+	Family familyToFamilyDTO(FamilyEntity family);
 	
-	Family familyDTOToFamily(FamilyDTO family);
+	FamilyEntity familyDTOToFamily(Family family);
 	
-	User userDTOToUser(UserDTO userDto);
-	UserDTO userToUserDTO(User user);
 
 }

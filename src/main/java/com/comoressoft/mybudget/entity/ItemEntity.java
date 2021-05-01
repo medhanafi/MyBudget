@@ -22,7 +22,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "item")
-public class Item {
+public class ItemEntity {
 
 	@Id
 	@GeneratedValue(generator = "seq_item", strategy = GenerationType.SEQUENCE)
@@ -48,10 +48,10 @@ public class Item {
 	private String itemStatus;
 
 	@ManyToOne
-	private SubCategory subCategory;
+	private SubCategoryEntity subCategory;
 	
 	@ManyToOne
-	private Family family;
+	private FamilyEntity family;
 
 	// @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
 	// CascadeType.MERGE })
@@ -62,7 +62,7 @@ public class Item {
 	// private Set<ShoppingList> shoppingList = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
-	private Set<ItemShoppingList> itemShoppingList = new HashSet<>();
+	private Set<ItemShoppingListEntity> itemShoppingList = new HashSet<>();
 
 	public Long getId() {
 		return id;
@@ -104,19 +104,19 @@ public class Item {
 		this.dateItem = dateItem;
 	}
 
-	public SubCategory getSubCategory() {
+	public SubCategoryEntity getSubCategory() {
 		return subCategory;
 	}
 
-	public void setSubCategory(SubCategory subCategory) {
+	public void setSubCategory(SubCategoryEntity subCategory) {
 		this.subCategory = subCategory;
 	}
 
-	public Set<ItemShoppingList> getItemShoppingList() {
+	public Set<ItemShoppingListEntity> getItemShoppingList() {
 		return itemShoppingList;
 	}
 
-	public void setItemShoppingList(Set<ItemShoppingList> itemShoppingList) {
+	public void setItemShoppingList(Set<ItemShoppingListEntity> itemShoppingList) {
 		this.itemShoppingList = itemShoppingList;
 	}
 
@@ -128,11 +128,11 @@ public class Item {
 		this.itemStatus = itemStatus;
 	}
 
-	public Family getFamily() {
+	public FamilyEntity getFamily() {
 		return family;
 	}
 
-	public void setFamily(Family family) {
+	public void setFamily(FamilyEntity family) {
 		this.family = family;
 	}
 

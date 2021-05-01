@@ -3,7 +3,7 @@ package com.comoressoft.mybudget.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class ShoppingListDTO {
+public class ShoppingList {
 
 	private Long id;
 	private String shoppingListName;

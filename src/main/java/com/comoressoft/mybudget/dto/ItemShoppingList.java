@@ -3,14 +3,14 @@ package com.comoressoft.mybudget.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class ItemShoppingListDTO {
+public class ItemShoppingList {
 
 	private Long id;
 	private BigDecimal actualAmount;
 	private int actualQuantity;
 	private LocalDate purchasedDate;
-	private ItemDTO item;
-	private ShoppingListDTO shoppingList;
+	private Item item;
+	private ShoppingList shoppingList;
 
 	public BigDecimal getActualAmount() {
 		return actualAmount;
@@ -36,19 +36,19 @@ public class ItemShoppingListDTO {
 		this.purchasedDate = purchasedDate;
 	}
 
-	public ItemDTO getItem() {
+	public Item getItem() {
 		return item;
 	}
 
-	public void setItem(ItemDTO item) {
+	public void setItem(Item item) {
 		this.item = item;
 	}
 
-	public ShoppingListDTO getShoppingList() {
+	public ShoppingList getShoppingList() {
 		return shoppingList;
 	}
 
-	public void setShoppingList(ShoppingListDTO shoppingList) {
+	public void setShoppingList(ShoppingList shoppingList) {
 		this.shoppingList = shoppingList;
 	}
 

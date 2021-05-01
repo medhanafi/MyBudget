@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.comoressoft.mybudget.dto.ItemDTO;
-import com.comoressoft.mybudget.entity.Item;
+import com.comoressoft.mybudget.dto.Item;
+import com.comoressoft.mybudget.entity.ItemEntity;
 import com.comoressoft.mybudget.repository.SubCategoryRepository;
 
 /**
@@ -25,8 +25,8 @@ public abstract class ItemDecorator implements ItemMapper {
 	@Autowired
 	private SubCategoryRepository subCategoryRepository;
 
-	public ItemDTO itemToItemDTO(Item item) {
-		ItemDTO itemDTO = delegate.itemToItemDTO(item);
+	public Item itemToItemDTO(ItemEntity item) {
+		Item itemDTO = delegate.itemToItemDTO(item);
 
 		item.getSubCategory()
 				.setSubCategoryTotalCost(item.getSubCategory().getSubCategoryTotalCost().add(item.getExpectedAmount()));
@@ -36,7 +36,7 @@ public abstract class ItemDecorator implements ItemMapper {
 		return itemDTO;
 	}
 
-	public Item itemDTOToItem(ItemDTO itemDTO) {
+	public ItemEntity itemDTOToItem(Item itemDTO) {
 		return delegate.itemDTOToItem(itemDTO);
 	}
 

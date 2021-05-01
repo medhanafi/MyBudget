@@ -19,7 +19,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "sub_category")
-public class SubCategory {
+public class SubCategoryEntity {
 	@Id
 	@GeneratedValue(generator = "seq_sub_category", strategy = GenerationType.SEQUENCE)
 	@Column(name = "id", nullable = false)
@@ -36,16 +36,16 @@ public class SubCategory {
 	private BigDecimal subCategoryTotalCost;
 
 	@ManyToOne
-	private Category category;
+	private CategoryEntity category;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "subCategory")
-	private List<Item> item = new ArrayList<>();
+	private List<ItemEntity> item = new ArrayList<>();
 
-	public SubCategory(Long subCategorie) {
+	public SubCategoryEntity(Long subCategorie) {
 		this.id = subCategorie;
 	}
 
-	public SubCategory() {
+	public SubCategoryEntity() {
 	}
 
 	public Long getId() {
@@ -80,19 +80,19 @@ public class SubCategory {
 		this.subCategoryTotalCost = subCategoryTotalCost;
 	}
 
-	public Category getCategory() {
+	public CategoryEntity getCategory() {
 		return category;
 	}
 
-	public void setCategory(Category category) {
+	public void setCategory(CategoryEntity category) {
 		this.category = category;
 	}
 
-	public List<Item> getItem() {
+	public List<ItemEntity> getItem() {
 		return item;
 	}
 
-	public void setItem(List<Item> item) {
+	public void setItem(List<ItemEntity> item) {
 		this.item = item;
 	}
 

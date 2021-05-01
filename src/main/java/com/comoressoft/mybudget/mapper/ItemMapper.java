@@ -7,8 +7,8 @@ import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.comoressoft.mybudget.dto.ItemDTO;
-import com.comoressoft.mybudget.entity.Item;
+import com.comoressoft.mybudget.dto.Item;
+import com.comoressoft.mybudget.entity.ItemEntity;
 
 /**
  * @author MHA14633
@@ -19,8 +19,8 @@ import com.comoressoft.mybudget.entity.Item;
 interface ItemMapper {
 
 	@Mapping(target = "itemId", source = "id")
-	ItemDTO itemToItemDTO(Item item);
+	Item itemToItemDTO(ItemEntity item);
 
 	@Mapping(target = "id", source = "itemId")
-	Item itemDTOToItem(ItemDTO itemDTO);
+	ItemEntity itemDTOToItem(Item itemDTO);
 }

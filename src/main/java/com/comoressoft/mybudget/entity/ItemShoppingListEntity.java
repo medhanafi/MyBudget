@@ -18,7 +18,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "item_shopping_list")
-public class ItemShoppingList {
+public class ItemShoppingListEntity {
 
 	@Id
 	@GeneratedValue(generator = "seq_item_shopping_list", strategy = GenerationType.SEQUENCE)
@@ -37,11 +37,11 @@ public class ItemShoppingList {
 
 	@ManyToOne
 	@JoinColumn(name = "item")
-	private Item item;
+	private ItemEntity item;
 
 	@ManyToOne
 	@JoinColumn(name = "shoppingList")
-	private ShoppingList shoppingList;
+	private ShoppingListEntity shoppingList;
 
 	public Long getId() {
 		return id;
@@ -75,19 +75,19 @@ public class ItemShoppingList {
 		this.purchasedDate = purchasedDate;
 	}
 
-	public Item getItem() {
+	public ItemEntity getItem() {
 		return item;
 	}
 
-	public void setItem(Item item) {
+	public void setItem(ItemEntity item) {
 		this.item = item;
 	}
 
-	public ShoppingList getShoppingList() {
+	public ShoppingListEntity getShoppingList() {
 		return shoppingList;
 	}
 
-	public void setShoppingList(ShoppingList shoppingList) {
+	public void setShoppingList(ShoppingListEntity shoppingList) {
 		this.shoppingList = shoppingList;
 	}
 

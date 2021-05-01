@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
 @Table(name = "family")
-public class Family implements Serializable{
+public class FamilyEntity implements Serializable{
 
 	/**
 	 * 
@@ -28,15 +28,12 @@ public class Family implements Serializable{
 	private String code;
 	private String pwd;
 	
+		
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "family")
+	private List<ItemEntity> item = new ArrayList<>();
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "family")
-	private List<User> user = new ArrayList<>();
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "family")
-	private List<Item> item = new ArrayList<>();
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "family")
-	private List<ShoppingList> shoppingList = new ArrayList<>();
+	private List<ShoppingListEntity> shoppingList = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -62,19 +59,19 @@ public class Family implements Serializable{
 		this.pwd = pwd;
 	}
 
-	public List<Item> getItem() {
+	public List<ItemEntity> getItem() {
 		return item;
 	}
 
-	public void setItem(List<Item> item) {
+	public void setItem(List<ItemEntity> item) {
 		this.item = item;
 	}
 
-	public List<ShoppingList> getShoppingList() {
+	public List<ShoppingListEntity> getShoppingList() {
 		return shoppingList;
 	}
 
-	public void setShoppingList(List<ShoppingList> shoppingList) {
+	public void setShoppingList(List<ShoppingListEntity> shoppingList) {
 		this.shoppingList = shoppingList;
 	}
 	

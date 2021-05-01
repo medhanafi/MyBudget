@@ -4,11 +4,11 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.comoressoft.mybudget.entity.Category;
-import com.comoressoft.mybudget.entity.SubCategory;
+import com.comoressoft.mybudget.entity.CategoryEntity;
+import com.comoressoft.mybudget.entity.SubCategoryEntity;
 
-public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> {
+public interface SubCategoryRepository extends JpaRepository<SubCategoryEntity, Long> {
 
-	Set<SubCategory> findByCategory(Category category);
+	Set<SubCategoryEntity> findByCategory(CategoryEntity category);
 
 }

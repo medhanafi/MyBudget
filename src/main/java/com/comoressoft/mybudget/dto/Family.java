@@ -1,6 +1,6 @@
 package com.comoressoft.mybudget.dto;
 
-public class FamilyDTO {
+public class Family {
 	private Long id;
 	private String code;
 	private String pwd;

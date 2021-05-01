@@ -1,8 +1,8 @@
 package com.comoressoft.mybudget.dto;
 
-public class SummaryDTO {
+public class Summary {
 	private int monthPosition;
-	private TotalSummaryDTO totalSummary;
+	private TotalSummary totalSummary;
 
 	public int getMonthPosition() {
 		return monthPosition;
@@ -12,11 +12,11 @@ public class SummaryDTO {
 		this.monthPosition = monthPosition;
 	}
 
-	public TotalSummaryDTO getTotalSummary() {
+	public TotalSummary getTotalSummary() {
 		return totalSummary;
 	}
 
-	public void setTotalSummary(TotalSummaryDTO totalSummary) {
+	public void setTotalSummary(TotalSummary totalSummary) {
 		this.totalSummary = totalSummary;
 	}
 

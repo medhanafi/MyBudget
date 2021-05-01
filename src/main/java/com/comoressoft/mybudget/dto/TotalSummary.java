@@ -2,7 +2,7 @@ package com.comoressoft.mybudget.dto;
 
 import java.math.BigDecimal;
 
-public class TotalSummaryDTO {
+public class TotalSummary {
 
 	private BigDecimal income;
 	private BigDecimal expense;

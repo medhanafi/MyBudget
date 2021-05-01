@@ -3,14 +3,14 @@ package com.comoressoft.mybudget.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class ItemDTO {
+public class Item {
 	private Long itemId;
 	private String itemLabelle;
 	private BigDecimal expectedAmount;
 	private int expectedQuantity;
 	private LocalDate dateItem;
 	private String itemStatus;
-	private SubCategoryDTO subCategory;
+	private SubCategory subCategory;
 
 	public Long getItemId() {
 		return itemId;
@@ -52,11 +52,11 @@ public class ItemDTO {
 		this.dateItem = dateItem;
 	}
 
-	public SubCategoryDTO getSubCategory() {
+	public SubCategory getSubCategory() {
 		return subCategory;
 	}
 
-	public void setSubCategory(SubCategoryDTO subCategory) {
+	public void setSubCategory(SubCategory subCategory) {
 		this.subCategory = subCategory;
 	}
 

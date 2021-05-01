@@ -2,7 +2,7 @@ package com.comoressoft.mybudget.dto;
 
 import java.math.BigDecimal;
 
-public class SubCategoryDTO {
+public class SubCategory {
 
 	private Long subCatId;
 	private String subCatLabel;
