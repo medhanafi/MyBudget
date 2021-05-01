@@ -304,3 +304,4 @@ temp/
 *.classpath
 /*.project
 /.settings
+/bin/
