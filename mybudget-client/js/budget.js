@@ -1,4 +1,4 @@
- var api_url = 'http://192.168.1.3:8085'
+ var api_url = 'http://localhost:8085'
 
  $(document).ready(function() {
 
