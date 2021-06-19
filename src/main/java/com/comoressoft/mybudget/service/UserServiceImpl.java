@@ -3,7 +3,6 @@ package com.comoressoft.mybudget.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,10 +21,9 @@ public class UserServiceImpl extends UserDetailsServiceImpl implements UserServi
 	@Override
 	public List<UserDTO> findAll() throws Exception {
 		List<User> users = this.getRepository().findAll();
-		
+
 		if (users != null && !users.isEmpty()) {
-			return CollectionsUtils.apply(users,
-					user -> this.mapper.userToUserDTO(user));
+			return CollectionsUtils.apply(users, user -> this.mapper.userToUserDTO(user));
 		} else {
 			throw new Exception("The users collections is empty");
 		}
@@ -46,12 +44,11 @@ public class UserServiceImpl extends UserDetailsServiceImpl implements UserServi
 			throw new Exception("User not found");
 		}
 	}
-	
 
 	@Override
 	public UserDTO findOne(String name) throws Exception {
 		User uData = this.getRepository().findByUsername(name);
-		if (uData!=null) {
+		if (uData != null) {
 			return this.mapper.userToUserDTO(uData);
 		} else {
 			throw new Exception("User not found");

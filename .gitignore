@@ -1,7 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 
 .idea
-
+.dbeaver
 ### Windows template
 # Windows thumbnail cache files
 Thumbs.db
@@ -303,3 +303,4 @@ temp/
 *.classpath
 /*.project
 /.settings
+/bin/
